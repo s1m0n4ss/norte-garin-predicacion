@@ -120,98 +120,118 @@
       display: none;
       max-width: 720px;
       margin: 0 auto;
-      padding: 16px 12px 100px;
+      padding: 12px 0 100px;
     }
     #appContent.vis { display: block; }
 
     /* ── DAY SECTION ── */
-    .day-section { margin-bottom: 28px; scroll-margin-top: 72px; }
+    .day-section {
+      margin-bottom: 24px;
+      scroll-margin-top: 72px;
+    }
+
+    /* ── DAY HEADER ── */
     .day-header {
-      display: flex; align-items: center; gap: 12px;
-      padding: 11px 14px;
-      background: #111827;
-      border-left: 3px solid #1e3a5f;
-      border-radius: 0 10px 10px 0;
-      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      background: #050c1a;
+      margin-bottom: 8px;
     }
-    .day-header.today { border-left-color: #60a5fa; }
+    .day-accent {
+      width: 4px;
+      height: 20px;
+      background: #1e3a8a;
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+    .day-header.today .day-accent { background: #3b82f6; }
     .day-name {
-      font-size: 12px; font-weight: 800;
-      letter-spacing: .14em; text-transform: uppercase;
-      color: #475569;
+      font-size: 14px; font-weight: 700;
+      letter-spacing: .1em; text-transform: uppercase;
+      color: #fff;
+      flex: 1;
     }
-    .day-header.today .day-name { color: #60a5fa; }
     .today-badge {
-      background: rgba(96,165,250,0.15);
+      background: rgba(59,130,246,0.15);
       color: #60a5fa;
-      border: 1px solid rgba(96,165,250,0.3);
+      border: 1px solid rgba(59,130,246,0.3);
       border-radius: 20px;
       padding: 2px 10px;
       font-size: 11px; font-weight: 700;
     }
 
-    /* ── TABLE ── */
-    .day-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-    .schedule-table {
-      width: 100%;
-      border-collapse: separate;
-      border-spacing: 0 4px;
+    /* ── LOCATION CARDS ── */
+    .loc-cards {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 0 12px;
     }
-    .schedule-table th {
-      font-size: 11px; font-weight: 700;
-      text-transform: uppercase; letter-spacing: .07em;
-      color: #334155;
-      padding: 4px 6px 8px;
-      text-align: center;
-    }
-    .schedule-table th.th-time {
-      text-align: left;
-      min-width: 82px; width: 82px;
-      padding-left: 2px;
-    }
-    .schedule-table td { padding: 0 4px 0 0; vertical-align: top; }
-    .schedule-table td.td-time {
-      padding: 0 8px 0 0;
-      vertical-align: middle;
-    }
-    .time-label {
-      font-size: 12px; font-weight: 600;
-      color: #94a3b8; white-space: nowrap;
-      line-height: 1.3;
-    }
-
-    /* ── CELL ── */
-    .slot-cell {
-      min-height: 64px;
-      min-width: 88px;
+    .loc-card {
+      background: #0a1628;
       border-radius: 10px;
-      padding: 7px 8px 8px;
-      cursor: pointer;
-      position: relative;
-      border: 1px solid transparent;
-      display: flex; flex-direction: column; gap: 3px;
-      transition: filter .12s;
+      border: 1px solid rgba(255,255,255,0.05);
+      padding: 12px 14px;
     }
-    .slot-cell:active { filter: brightness(1.25); }
-    .slot-free { background: #052e16; border-color: rgba(52,211,153,0.3); }
-    .slot-one  { background: #2d1c00; border-color: rgba(251,191,36,0.38); }
-    .slot-full { background: #2d0a0a; border-color: rgba(248,113,113,0.25); cursor: default; }
-    .slot-mine { background: #0c1a3d; border-color: rgba(96,165,250,0.45); }
-
-    .slot-counter {
-      position: absolute; top: 6px; right: 7px;
+    .loc-name {
       font-size: 10px; font-weight: 700;
-      color: rgba(255,255,255,0.25);
+      letter-spacing: 1.5px; text-transform: uppercase;
+      color: #475569;
+      margin-bottom: 10px;
     }
-    .slot-libre {
-      font-size: 12px; color: rgba(52,211,153,0.55);
-      margin-top: auto; margin-bottom: auto;
+
+    /* ── CHIPS ── */
+    .chips-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
     }
-    .slot-names {
-      font-size: 11px; line-height: 1.55;
-      color: #64748b; margin-top: 2px;
+    .chip {
+      border-radius: 8px;
+      padding: 6px 10px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      background: none;
+      font-family: inherit;
+      transition: filter .12s;
+      min-width: 58px;
     }
-    .slot-names .mine-name { color: #93c5fd; font-weight: 700; }
+    .chip:active { filter: brightness(1.3); }
+    .chip-time {
+      font-size: 14px; font-weight: 600;
+      line-height: 1;
+    }
+    .chip-status {
+      font-size: 10px;
+      line-height: 1;
+    }
+
+    .chip-libre {
+      background: #0d1117;
+      border: 1px solid rgba(255,255,255,0.05);
+      color: #64748b;
+    }
+    .chip-with-people {
+      background: #051a0e;
+      border: 1px solid rgba(52,211,153,0.2);
+      color: #34d399;
+    }
+    .chip-mine {
+      background: #0c1a3d;
+      border: 1.5px solid #3b82f6;
+      color: #60a5fa;
+    }
+    .chip-full {
+      background: #1a0808;
+      border: 1px solid rgba(248,113,113,0.3);
+      color: #f87171;
+      cursor: default;
+    }
 
     /* ── BOTTOM SHEET ── */
     #sheetOverlay {
@@ -353,23 +373,16 @@
   const UBICACION_DOMINGO  = ["Mini Estación Garín"];
 
   const SCHEDULE = [
-    { dia: "Lunes",     bloques: ["07:00-08:00","08:00-09:00","15:00-16:00","16:00-17:00"],                          ubicaciones: UBICACIONES_SEMANA },
-    { dia: "Martes",    bloques: ["07:00-08:00","08:00-09:00","09:00-10:00","10:00-11:00","11:00-12:00"],             ubicaciones: UBICACIONES_SEMANA },
-    { dia: "Miércoles", bloques: ["15:00-16:00","16:00-17:00","17:00-18:00","18:00-19:00","19:00-20:00"],             ubicaciones: UBICACIONES_SEMANA },
-    { dia: "Jueves",    bloques: ["07:00-08:00","08:00-09:00"],                                                       ubicaciones: UBICACIONES_SEMANA },
-    { dia: "Viernes",   bloques: ["07:00-08:00","08:00-09:00","17:00-18:00","18:00-19:00","19:00-20:00"],             ubicaciones: UBICACIONES_SEMANA },
-    { dia: "Sábado",    bloques: ["07:00-08:00","08:00-09:00"],                                                       ubicaciones: UBICACIONES_SEMANA },
-    { dia: "Domingo",   bloques: ["17:00-18:00","18:00-19:00","19:00-20:00"],                                         ubicaciones: UBICACION_DOMINGO  },
+    { dia: "Lunes",     bloques: ["07:00-08:00","08:00-09:00","15:00-16:00","16:00-17:00"],                         ubicaciones: UBICACIONES_SEMANA },
+    { dia: "Martes",    bloques: ["07:00-08:00","08:00-09:00","09:00-10:00","10:00-11:00","11:00-12:00"],            ubicaciones: UBICACIONES_SEMANA },
+    { dia: "Miércoles", bloques: ["15:00-16:00","16:00-17:00","17:00-18:00","18:00-19:00","19:00-20:00"],            ubicaciones: UBICACIONES_SEMANA },
+    { dia: "Jueves",    bloques: ["07:00-08:00","08:00-09:00"],                                                      ubicaciones: UBICACIONES_SEMANA },
+    { dia: "Viernes",   bloques: ["07:00-08:00","08:00-09:00","17:00-18:00","18:00-19:00","19:00-20:00"],            ubicaciones: UBICACIONES_SEMANA },
+    { dia: "Sábado",    bloques: ["07:00-08:00","08:00-09:00"],                                                      ubicaciones: UBICACIONES_SEMANA },
+    { dia: "Domingo",   bloques: ["17:00-18:00","18:00-19:00","19:00-20:00"],                                        ubicaciones: UBICACION_DOMINGO  },
   ];
 
   const DAY_INDEX = { "Lunes":1,"Martes":2,"Miércoles":3,"Jueves":4,"Viernes":5,"Sábado":6,"Domingo":0 };
-
-  const SHORT_NAME = {
-    "Hospital Garín":     "Hospital",
-    "Estación Garín":     "Estación",
-    "Puente 5":           "Puente 5",
-    "Mini Estación Garín":"Mini Est."
-  };
 
   function turnoId(dia, bloque, ubicacion) {
     const [ini, fin] = bloque.split("-");
@@ -383,7 +396,11 @@
   }
 
   function escHtml(s) {
-    return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+    return String(s)
+      .replace(/&/g,"&amp;")
+      .replace(/</g,"&lt;")
+      .replace(/>/g,"&gt;")
+      .replace(/"/g,"&quot;");
   }
 
   let myName       = localStorage.getItem("predicacion_nombre") || "";
@@ -470,7 +487,7 @@
 
   function refreshSheet() {
     if (!sheetTid) return;
-    const tid = sheetTid;
+    const tid      = sheetTid;
     const turno    = turnosData[tid] || {};
     const entries  = Object.entries(turno.anotados || {}).sort((a,b) => a[1].timestamp - b[1].timestamp);
     const count    = entries.length;
@@ -491,8 +508,7 @@
       }).join("");
     }
 
-    const spotsEl = document.getElementById("sheetSpots");
-    spotsEl.textContent = full
+    document.getElementById("sheetSpots").textContent = full
       ? "Turno completo"
       : `Quedan ${spotsLeft} lugar${spotsLeft === 1 ? "" : "es"}`;
 
@@ -500,7 +516,7 @@
     if (isMine) {
       btn.textContent = "Desanotarme";
       btn.className   = "sheet-btn sheet-btn-leave";
-      btn.onclick     = () => { desanotarme(tid); closeSheet(); };
+      btn.onclick     = () => { window.desanotarme(tid); window.closeSheet(); };
     } else if (full) {
       btn.textContent = "Turno completo";
       btn.className   = "sheet-btn sheet-btn-full";
@@ -508,7 +524,7 @@
     } else {
       btn.textContent = "Anotarme";
       btn.className   = "sheet-btn sheet-btn-join";
-      btn.onclick     = () => { anotarme(tid); closeSheet(); };
+      btn.onclick     = () => { window.anotarme(tid); window.closeSheet(); };
     }
   }
 
@@ -526,77 +542,84 @@
       if (isToday) todayDia = dia;
       const slug = daySlug(dia);
 
-      // Day header
+      html += `<div class="day-section" id="day-${slug}">`;
+
       html += `
-        <div class="day-section" id="day-${slug}">
-          <div class="day-header${isToday ? " today" : ""}">
-            <span class="day-name">${dia}</span>
-            ${isToday ? '<span class="today-badge">Hoy</span>' : ""}
-          </div>
-          <div class="day-table-wrap">
-          <table class="schedule-table">
-            <thead><tr>
-              <th class="th-time">Horario</th>
-              ${ubicaciones.map(u => `<th>${SHORT_NAME[u] || u}</th>`).join("")}
-            </tr></thead>
-            <tbody>
+        <div class="day-header${isToday ? " today" : ""}">
+          <div class="day-accent"></div>
+          <span class="day-name">${escHtml(dia)}</span>
+          ${isToday ? '<span class="today-badge">HOY</span>' : ""}
+        </div>
       `;
 
-      for (const bl of bloques) {
-        html += `<tr><td class="td-time"><div class="time-label">${bl.replace("-","–")}</div></td>`;
+      html += `<div class="loc-cards">`;
 
-        for (const ub of ubicaciones) {
-          const tid      = turnoId(dia, bl, ub);
-          const entries  = Object.entries((turnosData[tid]?.anotados) || {}).sort((a,b) => a[1].timestamp - b[1].timestamp);
-          const count    = entries.length;
-          const isMine   = entries.some(([,v]) => v.nombre === myName);
-          const full     = count >= 4;
-          const oneLeft  = count === 3;
+      for (const ub of ubicaciones) {
+        html += `
+          <div class="loc-card">
+            <div class="loc-name">${escHtml(ub)}</div>
+            <div class="chips-row">
+        `;
 
-          let cellClass = "slot-free";
-          if (isMine)       cellClass = "slot-mine";
-          else if (full)    cellClass = "slot-full";
-          else if (oneLeft) cellClass = "slot-one";
+        for (const bl of bloques) {
+          const tid     = turnoId(dia, bl, ub);
+          const entries = Object.entries((turnosData[tid]?.anotados) || {})
+                                .sort((a,b) => a[1].timestamp - b[1].timestamp);
+          const count   = entries.length;
+          const isMine  = entries.some(([,v]) => v.nombre === myName);
+          const full    = count >= 4;
 
-          // Safely encode for onclick attribute: JSON stringify the strings
-          const onclickAttr = `openSheet(${JSON.stringify(tid)},${JSON.stringify(dia)},${JSON.stringify(bl)},${JSON.stringify(ub)})`;
+          const startTime = bl.split("-")[0];
 
-          let bodyHtml;
-          if (entries.length === 0) {
-            bodyHtml = `<div class="slot-libre">Libre</div>`;
+          let chipClass, statusText;
+          if (isMine) {
+            chipClass  = "chip-mine";
+            statusText = "Anotado";
+          } else if (full) {
+            chipClass  = "chip-full";
+            statusText = "Lleno";
+          } else if (count > 0) {
+            chipClass  = "chip-with-people";
+            statusText = `${count}/4`;
           } else {
-            const lines = entries.map(([,v]) =>
-              v.nombre === myName
-                ? `<span class="mine-name">✓ ${escHtml(v.nombre)}</span>`
-                : escHtml(v.nombre)
-            ).join("<br>");
-            bodyHtml = `<div class="slot-names">${lines}</div>`;
+            chipClass  = "chip-libre";
+            statusText = "Libre";
           }
 
+          // data-* attributes avoid the double-quote escaping bug of inline onclick
           html += `
-            <td>
-              <div class="slot-cell ${cellClass}" onclick="${onclickAttr}">
-                <div class="slot-counter">${count}/4</div>
-                ${bodyHtml}
-              </div>
-            </td>`;
+            <button class="chip ${chipClass}"
+                    data-tid="${escHtml(tid)}"
+                    data-dia="${escHtml(dia)}"
+                    data-bl="${escHtml(bl)}"
+                    data-ub="${escHtml(ub)}">
+              <span class="chip-time">${startTime}</span>
+              <span class="chip-status">${statusText}</span>
+            </button>
+          `;
         }
 
-        html += `</tr>`;
+        html += `</div></div>`; // chips-row · loc-card
       }
 
-      html += `</tbody></table></div></div>`;
+      html += `</div></div>`; // loc-cards · day-section
     }
 
     document.getElementById("appContent").innerHTML = html;
 
-    // Scroll to today on first render
     if (!scrolledOnce && todayDia) {
       scrolledOnce = true;
       const el = document.getElementById("day-" + daySlug(todayDia));
       if (el) setTimeout(() => el.scrollIntoView({ behavior: "smooth", block: "start" }), 180);
     }
   }
+
+  // Chip click via event delegation — reads data-* attributes, no escaping issues
+  document.getElementById("appContent").addEventListener("click", e => {
+    const chip = e.target.closest(".chip[data-tid]");
+    if (!chip) return;
+    window.openSheet(chip.dataset.tid, chip.dataset.dia, chip.dataset.bl, chip.dataset.ub);
+  });
 
   // ── INIT ──────────────────────────────────────────────
   if (!myName) {
