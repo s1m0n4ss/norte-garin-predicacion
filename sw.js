@@ -22,6 +22,16 @@ self.addEventListener("activate", e => {
   );
 });
 
+self.addEventListener("notificationclick", e => {
+  e.notification.close();
+  e.waitUntil(
+    clients.matchAll({ type: "window" }).then(clientList => {
+      if (clientList.length > 0) return clientList[0].focus();
+      return clients.openWindow("/");
+    })
+  );
+});
+
 self.addEventListener("fetch", e => {
   if (e.request.method !== "GET") return;
   const url = new URL(e.request.url);
