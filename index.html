@@ -57,7 +57,6 @@
       box-shadow: 0 4px 40px rgba(15,23,42,0.10);
       text-align: center;
     }
-
     .login-logo {
       width: 56px; height: 56px;
       background: #0f172a;
@@ -65,14 +64,11 @@
       display: flex; align-items: center; justify-content: center;
       margin: 0 auto 20px;
       font-family: 'Poppins', sans-serif;
-      font-size: 22px;
-      font-weight: 900;
-      line-height: 1;
+      font-size: 22px; font-weight: 900; line-height: 1;
       user-select: none;
     }
     .login-logo .pp-blue { color: #2563eb; }
     .login-logo .pp-white { color: #fff; }
-
     .login-title {
       font-family: 'Poppins', sans-serif;
       font-size: 24px; font-weight: 700;
@@ -84,8 +80,7 @@
       margin-bottom: 32px;
     }
     .login-input {
-      width: 100%;
-      height: 52px;
+      width: 100%; height: 52px;
       background: #fff;
       border: 1.5px solid #E2E8F0;
       border-radius: 14px;
@@ -100,10 +95,8 @@
     .login-input::placeholder { color: #CBD5E1; }
     .login-input:focus { border-color: #2563EB; }
     .login-btn {
-      width: 100%;
-      height: 52px;
-      background: #2563EB;
-      color: #fff; border: none;
+      width: 100%; height: 52px;
+      background: #2563EB; color: #fff; border: none;
       border-radius: 14px;
       font-family: 'Poppins', sans-serif;
       font-size: 16px; font-weight: 700;
@@ -122,303 +115,222 @@
       display: none;
     }
     #appBanner.vis { display: block; }
-
     .banner-deco1 {
-      position: absolute;
-      width: 180px; height: 180px;
+      position: absolute; width: 180px; height: 180px;
       top: -40px; right: -40px;
-      background: rgba(96,165,250,0.08);
-      border-radius: 50%;
-      pointer-events: none;
+      background: rgba(96,165,250,0.08); border-radius: 50%; pointer-events: none;
     }
     .banner-deco2 {
-      position: absolute;
-      width: 140px; height: 140px;
+      position: absolute; width: 140px; height: 140px;
       bottom: -60px; left: -30px;
-      background: rgba(96,165,250,0.04);
-      border-radius: 50%;
-      pointer-events: none;
+      background: rgba(96,165,250,0.04); border-radius: 50%; pointer-events: none;
     }
-
     .banner-inner { max-width: 800px; margin: 0 auto; position: relative; }
-
-    .banner-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-    }
-
+    .banner-top { display: flex; justify-content: space-between; align-items: flex-start; }
     .banner-eyebrow {
-      font-family: 'Inter', sans-serif;
-      font-size: 11px;
-      color: rgba(255,255,255,0.5);
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      margin-bottom: 5px;
+      font-family: 'Inter', sans-serif; font-size: 11px;
+      color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 5px;
     }
-    .banner-title {
-      display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap;
-    }
+    .banner-title { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
     .banner-title-bold {
-      font-family: 'Poppins', sans-serif;
-      font-size: 28px; font-weight: 700;
-      color: #fff; line-height: 1.05;
+      font-family: 'Poppins', sans-serif; font-size: 28px; font-weight: 700; color: #fff; line-height: 1.05;
     }
     .banner-title-light {
-      font-family: 'Poppins', sans-serif;
-      font-size: 28px; font-weight: 400;
-      color: #bae6fd; line-height: 1.05;
+      font-family: 'Poppins', sans-serif; font-size: 28px; font-weight: 400; color: #bae6fd; line-height: 1.05;
     }
-
     .banner-user-card {
       background: rgba(255,255,255,0.1);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
       border: 1px solid rgba(255,255,255,0.15);
-      border-radius: 16px;
-      padding: 10px 16px;
-      flex-shrink: 0;
+      border-radius: 16px; padding: 10px 16px; flex-shrink: 0;
     }
     .banner-user-label {
-      font-family: 'Inter', sans-serif;
-      font-size: 10px;
-      color: rgba(255,255,255,0.7);
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      margin-bottom: 3px;
+      font-family: 'Inter', sans-serif; font-size: 10px;
+      color: rgba(255,255,255,0.7); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 3px;
     }
     #bannerUserName {
-      font-family: 'Inter', sans-serif;
-      font-size: 15px; font-weight: 700;
-      color: #fff;
-      cursor: pointer;
-      max-width: 120px;
-      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-      display: block;
+      font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 700; color: #fff;
+      cursor: pointer; max-width: 120px;
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: block;
     }
-
-    .banner-turns-row {
-      margin-top: 22px;
-      display: flex; gap: 12px;
-    }
+    .banner-turns-row { margin-top: 22px; display: flex; gap: 12px; }
     #bannerTurns { display: flex; gap: 12px; flex: 1; }
-
     .banner-turn-card {
       background: rgba(255,255,255,0.1);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      border-radius: 14px;
-      padding: 12px 14px;
-      flex: 1;
-      border: 1px solid rgba(255,255,255,0.1);
-      min-width: 0;
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      border-radius: 14px; padding: 12px 14px; flex: 1;
+      border: 1px solid rgba(255,255,255,0.1); min-width: 0;
     }
-    .turn-card-time {
-      font-family: 'Inter', sans-serif;
-      font-size: 11px; color: #bae6fd;
-      margin-bottom: 3px;
-    }
+    .turn-card-time { font-family: 'Inter', sans-serif; font-size: 11px; color: #bae6fd; margin-bottom: 3px; }
     .turn-card-loc {
-      font-family: 'Poppins', sans-serif;
-      font-size: 14px; font-weight: 700;
-      color: #fff;
+      font-family: 'Poppins', sans-serif; font-size: 14px; font-weight: 700; color: #fff;
       overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
     }
 
     /* ── LEGEND BAR ── */
-    #legendBar {
-      display: none;
-      background: #fff;
-      padding: 12px 20px;
-      border-bottom: 1px solid #E2E8F0;
-    }
+    #legendBar { display: none; background: #fff; padding: 12px 20px; border-bottom: 1px solid #E2E8F0; }
     #legendBar.vis { display: flex; gap: 16px; flex-wrap: wrap; align-items: center; }
-
-    .legend-item {
-      display: flex; align-items: center; gap: 5px;
-      font-family: 'Inter', sans-serif;
-      font-size: 12px; color: #64748b;
-    }
-    .legend-dot {
-      width: 10px; height: 10px;
-      border-radius: 50%; flex-shrink: 0;
-    }
+    .legend-item { display: flex; align-items: center; gap: 5px; font-family: 'Inter', sans-serif; font-size: 12px; color: #64748b; }
+    .legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
 
     /* ── LOADING ── */
-    #loadingState {
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      padding: 100px 0;
-    }
+    #loadingState { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 100px 0; }
     .spinner {
-      width: 28px; height: 28px;
-      border: 2.5px solid #e2e8f0;
-      border-top-color: #2563eb;
-      border-radius: 50%;
-      animation: spin .7s linear infinite;
-      margin-bottom: 12px;
+      width: 28px; height: 28px; border: 2.5px solid #e2e8f0; border-top-color: #2563eb;
+      border-radius: 50%; animation: spin .7s linear infinite; margin-bottom: 12px;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
-    .loading-txt {
-      font-family: 'Inter', sans-serif;
-      font-size: 13px; color: #94a3b8;
-    }
+    .loading-txt { font-family: 'Inter', sans-serif; font-size: 13px; color: #94a3b8; }
 
-    /* ── APP CONTENT ── */
-    #appContent {
-      display: none;
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 16px 12px 100px;
-    }
+    /* ── APP CONTENT (grid) ── */
+    #appContent { display: none; max-width: 800px; margin: 0 auto; padding: 16px 12px 100px; }
     #appContent.vis { display: block; }
+
+    /* ── MIS TURNOS / PERFIL VIEWS ── */
+    #viewMisTurnos, #viewPerfil { display: none; max-width: 800px; margin: 0 auto; padding-bottom: 100px; }
+    #viewMisTurnos.vis, #viewPerfil.vis { display: block; }
+
+    .view-title {
+      font-family: 'Poppins', sans-serif; font-size: 20px; font-weight: 700; color: #0F172A;
+      padding: 20px 20px 12px;
+    }
+    .mt-day-header {
+      font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 1.5px; color: #94a3b8;
+      padding: 12px 20px 6px;
+    }
+    .mt-card {
+      background: #fff; border-radius: 16px; padding: 14px 16px;
+      margin: 0 12px 10px;
+      box-shadow: 0 1px 8px rgba(0,0,0,0.06);
+      border-left: 4px solid #10B981;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .mt-card-info { flex: 1; min-width: 0; }
+    .mt-card-loc {
+      font-family: 'Poppins', sans-serif; font-size: 15px; font-weight: 700; color: #0F172A;
+      margin-bottom: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+    .mt-card-time { font-family: 'Inter', sans-serif; font-size: 13px; color: #2563EB; }
+    .mt-btn-unannotate {
+      flex-shrink: 0; background: #fee2e2; color: #EF4444;
+      border: none; border-radius: 10px; padding: 6px 14px;
+      font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 700; cursor: pointer;
+    }
+    .mt-empty { text-align: center; padding: 60px 20px 40px; }
+    .mt-empty-icon { color: #CBD5E1; margin-bottom: 16px; }
+    .mt-empty-title { font-family: 'Inter', sans-serif; font-size: 15px; color: #94a3b8; margin-bottom: 8px; }
+    .mt-empty-sub { font-family: 'Inter', sans-serif; font-size: 13px; color: #CBD5E1; }
+
+    .perfil-card {
+      background: #fff; border-radius: 16px; padding: 24px 20px;
+      margin: 0 12px;
+      box-shadow: 0 1px 8px rgba(0,0,0,0.06);
+      text-align: center;
+    }
+    .perfil-label {
+      font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 1px; color: #94a3b8; margin-bottom: 8px;
+    }
+    .perfil-name { font-family: 'Poppins', sans-serif; font-size: 22px; font-weight: 700; color: #0F172A; margin-bottom: 20px; }
+    .perfil-change-btn {
+      background: #F1F5F9; color: #64748b; border: none; border-radius: 12px;
+      padding: 10px 24px; font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 600; cursor: pointer;
+    }
 
     /* ── GRID ── */
     .grid-scroll-container { position: relative; }
-    .grid-wrap {
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-    }
+    .grid-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
     .scroll-fade {
-      position: absolute;
-      top: 0; right: 0; bottom: 0; width: 52px;
+      position: absolute; top: 0; right: 0; bottom: 0; width: 52px;
       background: linear-gradient(to right, transparent, #F1F5F9);
-      pointer-events: none;
-      transition: opacity .18s;
-      z-index: 2;
+      pointer-events: none; transition: opacity .18s; z-index: 2;
     }
     .scroll-fade.hidden { opacity: 0; }
-
     .schedule-grid {
-      display: grid;
-      grid-template-columns: 72px repeat(7, 1fr);
-      min-width: 540px;
-      gap: 4px;
+      display: grid; grid-template-columns: 72px repeat(7, 1fr);
+      min-width: 540px; gap: 4px;
     }
-
     .gh-day {
-      font-family: 'Inter', sans-serif;
-      font-size: 11px; font-weight: 700;
-      text-align: center; color: #94a3b8;
-      padding-bottom: 8px;
+      font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 700;
+      text-align: center; color: #94a3b8; padding-bottom: 8px;
       display: flex; flex-direction: column; align-items: center; gap: 3px;
     }
     .gh-day.gh-today { color: #2563EB; }
-    .gh-pip {
-      width: 4px; height: 4px;
-      border-radius: 50%; background: #2563EB;
-    }
-
+    .gh-pip { width: 4px; height: 4px; border-radius: 50%; background: #2563EB; }
     .gl-loc {
-      font-family: 'Inter', sans-serif;
-      font-size: 10px; color: #94a3b8;
+      font-family: 'Inter', sans-serif; font-size: 10px; color: #94a3b8;
       text-transform: uppercase; letter-spacing: 0.04em;
-      display: flex; align-items: center;
-      padding-right: 4px; line-height: 1.3;
+      display: flex; align-items: center; padding-right: 4px; line-height: 1.3;
     }
-
     .gc {
-      min-height: 68px;
-      border-radius: 14px;
-      display: flex; flex-direction: column;
-      justify-content: center; align-items: center;
-      gap: 4px;
-      cursor: pointer;
-      transition: transform .12s;
-      position: relative;
-      padding: 6px 4px;
-      text-align: center;
+      min-height: 68px; border-radius: 14px;
+      display: flex; flex-direction: column; justify-content: center; align-items: center;
+      gap: 4px; cursor: pointer; transition: transform .12s;
+      position: relative; padding: 6px 4px; text-align: center;
     }
     .gc:not(.gc-none):active { transform: scale(0.96); }
-
     .gc-none { background: transparent; cursor: default; }
-
     .gc-free { background: #fff; border: 1.5px solid #CBD5E1; }
     .gc-with-people { background: #F0F9FF; border: 2px solid #7dd3fc; box-shadow: 0 2px 8px rgba(0,0,0,0.07); }
     .gc-mine { background: #ecfdf5; border: 2px solid #10B981; box-shadow: 0 2px 8px rgba(0,0,0,0.07); }
     .gc-full { background: #fef2f2; border: 2px solid #fca5a5; box-shadow: 0 2px 8px rgba(0,0,0,0.07); }
-
     .gc-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
     .gc-free .gc-dot { background: #CBD5E1; }
     .gc-with-people .gc-dot { background: #7dd3fc; }
     .gc-mine .gc-dot { background: #10B981; }
     .gc-full .gc-dot { background: #fca5a5; }
-
-    .gc-text {
-      font-size: 10px; font-weight: 700;
-      font-family: 'Inter', sans-serif;
-      line-height: 1;
-    }
+    .gc-text { font-size: 10px; font-weight: 700; font-family: 'Inter', sans-serif; line-height: 1; }
     .gc-free .gc-text { color: #CBD5E1; }
     .gc-with-people .gc-text { color: #2563EB; }
     .gc-mine .gc-text { color: #10B981; }
     .gc-full .gc-text { color: #EF4444; }
-
     .gc-today-col:not(.gc-none) { outline: 2px solid rgba(37,99,235,0.2); outline-offset: 1px; }
 
     /* ── BOTTOM SHEET ── */
     #sheetOverlay {
       position: fixed; inset: 0;
       background: rgba(15,23,42,0.5);
-      backdrop-filter: blur(3px);
-      -webkit-backdrop-filter: blur(3px);
+      backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px);
       z-index: 60; display: none;
     }
     #sheetOverlay.open { display: block; }
-
     #bottomSheet {
-      position: fixed;
-      bottom: 0; left: 0; right: 0;
-      background: #fff;
-      border-radius: 24px 24px 0 0;
+      position: fixed; bottom: 0; left: 0; right: 0;
+      background: #fff; border-radius: 24px 24px 0 0;
       padding: 6px 20px 40px;
-      max-width: 480px;
-      margin: 0 auto;
+      max-width: 480px; margin: 0 auto;
       z-index: 61;
       transform: translateY(100%);
       transition: transform .3s cubic-bezier(.32,.72,0,1);
-      max-height: 88vh;
-      overflow-y: auto;
+      max-height: 88vh; overflow-y: auto;
       box-shadow: 0 -8px 40px rgba(0,0,0,0.18);
     }
     #bottomSheet.open { transform: translateY(0); }
 
-    .sheet-drag-bar {
-      width: 40px; height: 4px;
-      background: #CBD5E1;
-      border-radius: 2px;
-      margin: 12px auto 20px;
-    }
-
-    .sheet-header {
-      display: flex; align-items: center; gap: 12px;
-      margin-bottom: 20px;
-    }
-    .sheet-loc-icon {
-      width: 44px; height: 44px;
-      background: #F1F5F9;
-      border-radius: 14px;
+    .sheet-close-btn {
+      position: absolute; top: 16px; right: 16px;
+      width: 32px; height: 32px; border-radius: 50%;
+      background: #F1F5F9; color: #94a3b8;
+      border: none; cursor: pointer;
+      font-family: 'Inter', sans-serif; font-size: 18px; line-height: 1;
       display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0;
-      color: #64748b;
+      z-index: 1;
     }
-    .sheet-loc-name {
-      font-family: 'Poppins', sans-serif;
-      font-size: 18px; font-weight: 700; color: #0F172A;
+    .sheet-drag-bar {
+      width: 40px; height: 4px; background: #CBD5E1;
+      border-radius: 2px; margin: 12px auto 20px;
     }
-    .sheet-day-lbl {
-      font-family: 'Inter', sans-serif;
-      font-size: 13px; color: #2563EB;
-      margin-top: 2px;
+    .sheet-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+    .sheet-loc-icon {
+      width: 44px; height: 44px; background: #F1F5F9; border-radius: 14px;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: #64748b;
     }
-
+    .sheet-loc-name { font-family: 'Poppins', sans-serif; font-size: 18px; font-weight: 700; color: #0F172A; }
+    .sheet-day-lbl { font-family: 'Inter', sans-serif; font-size: 13px; color: #2563EB; margin-top: 2px; }
     .sheet-section-lbl {
-      font-family: 'Inter', sans-serif;
-      font-size: 11px; font-weight: 700;
-      text-transform: uppercase;
-      color: #CBD5E1;
-      letter-spacing: 1.5px;
-      margin-bottom: 12px;
+      font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 700;
+      text-transform: uppercase; color: #CBD5E1; letter-spacing: 1.5px; margin-bottom: 12px;
     }
 
     .sbl-row { background: #F1F5F9; border-radius: 16px; padding: 14px 16px; margin-bottom: 10px; }
@@ -429,7 +341,7 @@
     .sbl-clock { flex-shrink: 0; }
     .sbl-info { flex: 1; min-width: 0; }
     .sbl-time { font-size: 15px; font-weight: 700; font-family: 'Inter', sans-serif; color: #0F172A; }
-    .sbl-status { font-size: 12px; font-family: 'Inter', sans-serif; margin-top: 2px; }
+    .sbl-status { font-size: 12px; font-family: 'Inter', sans-serif; margin-top: 2px; line-height: 1.5; }
     .sbl-dots { display: flex; gap: 4px; flex-shrink: 0; }
     .sbl-dot { width: 8px; height: 8px; border-radius: 50%; background: #E2E8F0; }
     .sbl-dot.sbl-dot-taken { background: #2563EB; }
@@ -450,39 +362,50 @@
     }
     .sbl-full-txt { color: #EF4444; font-size: 12px; font-weight: 600; font-family: 'Inter', sans-serif; }
 
+    /* Companion form */
+    .companion-form { margin-top: 12px; padding-top: 12px; border-top: 1px solid #e2e8f0; }
+    .companion-label { font-family: 'Inter', sans-serif; font-size: 13px; color: #64748b; margin-bottom: 8px; }
+    .companion-input {
+      width: 100%; background: #fff; border: 1px solid #E2E8F0; border-radius: 10px;
+      padding: 10px 12px; font-family: 'Inter', sans-serif; font-size: 15px; color: #0F172A;
+      outline: none; margin-bottom: 10px; transition: border-color .15s;
+    }
+    .companion-input:focus { border-color: #2563EB; }
+    .companion-input::placeholder { color: #CBD5E1; }
+    .companion-btns { display: flex; gap: 8px; }
+    .companion-btn-solo {
+      flex: 1; padding: 9px 0; background: #F1F5F9; color: #64748b;
+      border: none; border-radius: 10px;
+      font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 600; cursor: pointer;
+    }
+    .companion-btn-confirm {
+      flex: 1; padding: 9px 0; background: #2563EB; color: #fff;
+      border: none; border-radius: 10px;
+      font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer;
+    }
+
     /* ── TOAST ── */
     .toast {
-      position: fixed;
-      bottom: 90px; left: 50%;
+      position: fixed; bottom: 90px; left: 50%;
       transform: translateX(-50%) translateY(20px);
       background: #0F172A; color: #fff;
       border-radius: 14px; padding: 12px 20px;
       font-family: 'Inter', sans-serif; font-size: 14px;
       box-shadow: 0 8px 32px rgba(0,0,0,0.25);
       opacity: 0; transition: opacity .25s, transform .25s;
-      z-index: 200; white-space: nowrap;
-      pointer-events: none;
+      z-index: 200; white-space: nowrap; pointer-events: none;
     }
-    .toast.toast-visible {
-      opacity: 1;
-      transform: translateX(-50%) translateY(0);
-    }
+    .toast.toast-visible { opacity: 1; transform: translateX(-50%) translateY(0); }
 
     /* ── BOTTOM NAV ── */
     #bottomNav {
       position: fixed; bottom: 0; left: 0; right: 0;
-      background: #fff;
-      border-top: 1px solid #E2E8F0;
+      background: #fff; border-top: 1px solid #E2E8F0;
       padding: 10px 0 calc(18px + env(safe-area-inset-bottom));
       box-shadow: 0 -2px 16px rgba(0,0,0,0.06);
-      z-index: 40;
-      display: none;
-      justify-content: space-around;
-      align-items: center;
-      max-width: 480px; margin: 0 auto;
+      z-index: 40; display: none; justify-content: space-around; align-items: center;
     }
     #bottomNav.vis { display: flex; }
-
     .nav-btn {
       display: flex; flex-direction: column; align-items: center; gap: 3px;
       background: none; border: none; cursor: pointer;
@@ -499,9 +422,7 @@
 <!-- LOGIN SCREEN -->
 <div id="loginScreen">
   <div class="login-card">
-    <div class="login-logo">
-      <span class="pp-blue">P</span><span class="pp-white">P</span>
-    </div>
+    <div class="login-logo"><span class="pp-blue">P</span><span class="pp-white">P</span></div>
     <div class="login-title">Predicación Pública</div>
     <div class="login-sub">Norte Garín · 2026</div>
     <input type="text" id="nameInput" class="login-input" placeholder="Tu nombre completo" autocomplete="name" />
@@ -527,9 +448,7 @@
         <span id="bannerUserName" onclick="showLogin()" title="Cambiar nombre"></span>
       </div>
     </div>
-    <div class="banner-turns-row">
-      <div id="bannerTurns"></div>
-    </div>
+    <div class="banner-turns-row"><div id="bannerTurns"></div></div>
   </div>
 </header>
 
@@ -550,17 +469,23 @@
 <!-- APP CONTENT (grid) -->
 <div id="appContent"></div>
 
+<!-- MIS TURNOS VIEW -->
+<div id="viewMisTurnos"></div>
+
+<!-- PERFIL VIEW -->
+<div id="viewPerfil"></div>
+
 <!-- SHEET OVERLAY -->
 <div id="sheetOverlay" onclick="closeSheet()"></div>
 
 <!-- BOTTOM SHEET -->
 <div id="bottomSheet">
+  <button class="sheet-close-btn" onclick="closeSheet()">✕</button>
   <div class="sheet-drag-bar"></div>
   <div class="sheet-header">
     <div class="sheet-loc-icon">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/>
-        <circle cx="12" cy="10" r="3"/>
+        <path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
       </svg>
     </div>
     <div>
@@ -577,14 +502,14 @@
 
 <!-- BOTTOM NAV -->
 <nav id="bottomNav">
-  <button class="nav-btn nav-active" onclick="">
+  <button id="nav-inicio" class="nav-btn nav-active" onclick="switchTab('inicio')">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
       <polyline points="9 22 9 12 15 12 15 22"/>
     </svg>
     <span>Inicio</span>
   </button>
-  <button class="nav-btn" onclick="document.getElementById('appContent').scrollIntoView({behavior:'smooth'})">
+  <button id="nav-misturnos" class="nav-btn" onclick="switchTab('misturnos')">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <rect x="3" y="4" width="18" height="18" rx="2"/>
       <line x1="16" y1="2" x2="16" y2="6"/>
@@ -593,7 +518,7 @@
     </svg>
     <span>Mis Turnos</span>
   </button>
-  <button class="nav-btn" onclick="showLogin()">
+  <button id="nav-perfil" class="nav-btn" onclick="switchTab('perfil')">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
       <circle cx="12" cy="7" r="4"/>
@@ -635,10 +560,8 @@
   ];
 
   const DAY_INDEX = { "Lunes":1,"Martes":2,"Miércoles":3,"Jueves":4,"Viernes":5,"Sábado":6,"Domingo":0 };
-
   const ALL_LOCS  = ["Hospital Garín","Estación Garín","Puente 5","Mini Estación Garín"];
   const ALL_DAYS  = ["Lunes","Martes","Miércoles","Jueves","Viernes","Sábado","Domingo"];
-
   const SHORT_DAYS = {
     "Lunes":"Lun","Martes":"Mar","Miércoles":"Mié",
     "Jueves":"Jue","Viernes":"Vie","Sábado":"Sáb","Domingo":"Dom"
@@ -650,11 +573,12 @@
     "Mini Estación Garín":"Mini Est."
   };
 
-  // "dia::ub" → [bloque, ...]
   const CELL_BLOCKS = {};
   for (const { dia, bloques, ubicaciones } of SCHEDULE) {
     for (const ub of ubicaciones) CELL_BLOCKS[`${dia}::${ub}`] = bloques;
   }
+
+  const clockSvg = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`;
 
   // ── HELPERS ────────────────────────────────────────────
   function turnoId(dia, bloque, ubicacion) {
@@ -671,11 +595,13 @@
   }
 
   // ── STATE ──────────────────────────────────────────────
-  let myName       = localStorage.getItem("predicacion_nombre") || "";
-  let turnosData   = {};
-  let fbLoaded     = false;
-  let sheetCellDia = null;
-  let sheetCellUb  = null;
+  let myName         = localStorage.getItem("predicacion_nombre") || "";
+  let turnosData     = {};
+  let fbLoaded       = false;
+  let sheetCellDia   = null;
+  let sheetCellUb    = null;
+  let currentTab     = "inicio";
+  let pendingAnotarTid = null;
 
   // ── TOAST ──────────────────────────────────────────────
   function showToast(msg) {
@@ -685,6 +611,20 @@
     clearTimeout(t._tid);
     t._tid = setTimeout(() => t.classList.remove("toast-visible"), 2500);
   }
+
+  // ── TAB NAVIGATION ─────────────────────────────────────
+  window.switchTab = function(tab) {
+    currentTab = tab;
+    ["inicio","misturnos","perfil"].forEach(t => {
+      document.getElementById(`nav-${t}`).classList.toggle("nav-active", t === tab);
+    });
+    document.getElementById("appContent").classList.toggle("vis", tab === "inicio");
+    document.getElementById("legendBar").classList.toggle("vis", tab === "inicio");
+    document.getElementById("viewMisTurnos").classList.toggle("vis", tab === "misturnos");
+    document.getElementById("viewPerfil").classList.toggle("vis", tab === "perfil");
+    if (tab === "misturnos" && fbLoaded) renderMisTurnos();
+    if (tab === "perfil") renderPerfil();
+  };
 
   // ── NAME ───────────────────────────────────────────────
   window.saveName = function() {
@@ -702,6 +642,8 @@
     document.getElementById("appBanner").classList.remove("vis");
     document.getElementById("legendBar").classList.remove("vis");
     document.getElementById("appContent").classList.remove("vis");
+    document.getElementById("viewMisTurnos").classList.remove("vis");
+    document.getElementById("viewPerfil").classList.remove("vis");
     document.getElementById("bottomNav").classList.remove("vis");
     setTimeout(() => document.getElementById("nameInput").focus(), 80);
   };
@@ -709,9 +651,8 @@
   function hideLogin() {
     document.getElementById("loginScreen").classList.remove("vis");
     document.getElementById("appBanner").classList.add("vis");
-    document.getElementById("legendBar").classList.add("vis");
-    document.getElementById("appContent").classList.add("vis");
     document.getElementById("bottomNav").classList.add("vis");
+    switchTab(currentTab);
   }
 
   document.getElementById("nameInput").addEventListener("keydown", e => {
@@ -724,10 +665,15 @@
     turnosData = snap.val() || {};
     fbLoaded   = true;
     document.getElementById("loadingState").style.display = "none";
-    if (myName) { hideLogin(); render(); }
+    if (myName) {
+      hideLogin();
+      render();
+      if (currentTab === "misturnos") renderMisTurnos();
+    }
     if (sheetCellDia) refreshSheet();
   });
 
+  // ── FIREBASE ACTIONS ───────────────────────────────────
   window.anotarme = async function(tid) {
     const anotados = turnosData[tid]?.anotados || {};
     if (Object.keys(anotados).length >= 4) return;
@@ -735,14 +681,49 @@
     showToast("¡Te anotaste exitosamente!");
   };
 
+  window.anotarmeConAcompaniante = async function(tid, companionName) {
+    const anotados = turnosData[tid]?.anotados || {};
+    const count = Object.keys(anotados).length;
+    if (count >= 4) return;
+    await db.ref(`predicacion/turnos/${tid}/anotados`).push({ nombre: myName, timestamp: Date.now() });
+    if (count + 1 < 4) {
+      await db.ref(`predicacion/turnos/${tid}/anotados`).push({ nombre: companionName, timestamp: Date.now(), addedBy: myName });
+    }
+    showToast("¡Te anotaste exitosamente!");
+  };
+
   window.desanotarme = async function(tid) {
     const anotados = turnosData[tid]?.anotados || {};
+    const toRemove = [];
     for (const [pid, val] of Object.entries(anotados)) {
-      if (val.nombre === myName) {
-        await db.ref(`predicacion/turnos/${tid}/anotados/${pid}`).remove();
-        showToast("Te desanotaste del turno");
-        return;
-      }
+      if (val.nombre === myName || val.addedBy === myName) toRemove.push(pid);
+    }
+    if (!toRemove.length) return;
+    await Promise.all(toRemove.map(pid =>
+      db.ref(`predicacion/turnos/${tid}/anotados/${pid}`).remove()
+    ));
+    showToast("Te desanotaste del turno");
+  };
+
+  // ── COMPANION FORM ─────────────────────────────────────
+  window.showCompanionForm = function(tid) {
+    pendingAnotarTid = tid;
+    refreshSheet();
+  };
+
+  window.soloYo = async function(tid) {
+    pendingAnotarTid = null;
+    await window.anotarme(tid);
+  };
+
+  window.confirmarAnotar = async function(tid) {
+    const input = document.getElementById(`ci-${tid}`);
+    const companion = input ? input.value.trim() : "";
+    pendingAnotarTid = null;
+    if (companion) {
+      await window.anotarmeConAcompaniante(tid, companion);
+    } else {
+      await window.anotarme(tid);
     }
   };
 
@@ -759,8 +740,9 @@
   };
 
   window.closeSheet = function() {
-    sheetCellDia = null;
-    sheetCellUb  = null;
+    sheetCellDia     = null;
+    sheetCellUb      = null;
+    pendingAnotarTid = null;
     document.getElementById("sheetOverlay").classList.remove("open");
     document.getElementById("bottomSheet").classList.remove("open");
     document.body.style.overflow = "";
@@ -773,8 +755,6 @@
     const bloques = CELL_BLOCKS[`${dia}::${ub}`] || [];
 
     let html = "";
-    const clockSvg = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`;
-
     for (const bl of bloques) {
       const tid     = turnoId(dia, bl, ub);
       const entries = Object.entries(turnosData[tid]?.anotados || {})
@@ -782,35 +762,60 @@
       const count   = entries.length;
       const isMine  = entries.some(([,v]) => v.nombre === myName);
       const full    = count >= 4;
+      const isPending = pendingAnotarTid === tid;
 
       const rowBorderCls = isMine ? "sbl-border-mine" : full ? "sbl-border-full" : "sbl-border-normal";
       const clockColor   = isMine ? "#10B981" : full ? "#EF4444" : "#94a3b8";
 
-      // 4 dots
       const dots = Array.from({length: 4}, (_, i) => {
         if (i < count) {
-          const isMeSlot = entries[i][1].nombre === myName;
-          return `<div class="sbl-dot ${isMeSlot ? "sbl-dot-mine" : "sbl-dot-taken"}"></div>`;
+          const cls = entries[i][1].nombre === myName ? "sbl-dot-mine" : "sbl-dot-taken";
+          return `<div class="sbl-dot ${cls}"></div>`;
         }
         return `<div class="sbl-dot"></div>`;
       }).join("");
 
-      // Status text
-      let statusText;
-      if (isMine) statusText = `<span style="color:#10B981">✓ Vos anotado</span>`;
-      else if (full) statusText = `<span style="color:#EF4444">Turno completo</span>`;
-      else if (count > 0) {
-        const names = entries.map(([,v]) => escHtml(v.nombre.split(" ")[0])).join(", ");
-        statusText = `<span style="color:#94a3b8">${names}</span>`;
+      // Build status lines — show companion with arrow indicator
+      let statusLines = [];
+      if (entries.length === 0) {
+        statusLines.push(`<span style="color:#94a3b8">Sin anotados</span>`);
       } else {
-        statusText = `<span style="color:#94a3b8">Sin anotados</span>`;
+        for (const [, v] of entries) {
+          if (v.nombre === myName) {
+            statusLines.push(`<span style="color:#10B981">✓ Vos anotado</span>`);
+          } else if (v.addedBy === myName) {
+            statusLines.push(`<span style="color:#94a3b8;font-size:11px">↳ ${escHtml(v.nombre.split(" ")[0])}</span>`);
+          } else {
+            statusLines.push(`<span style="color:#94a3b8">${escHtml(v.nombre.split(" ")[0])}</span>`);
+          }
+        }
+        if (!isMine && full) statusLines = [`<span style="color:#EF4444">Turno completo</span>`];
+      }
+      const statusHtml = statusLines.join(" ");
+
+      let actionHtml;
+      if (isPending) {
+        actionHtml = "";
+      } else if (isMine) {
+        actionHtml = `<button class="sbl-btn-quit" onclick="window.desanotarme('${tid}')">Quitar</button>`;
+      } else if (full) {
+        actionHtml = `<span class="sbl-full-txt">Lleno</span>`;
+      } else {
+        actionHtml = `<button class="sbl-btn-join" onclick="window.showCompanionForm('${tid}')">Anotar</button>`;
       }
 
-      // Action
-      let action;
-      if (isMine) action = `<button class="sbl-btn-quit" onclick="window.desanotarme('${tid}')">Quitar</button>`;
-      else if (full) action = `<span class="sbl-full-txt">Lleno</span>`;
-      else action = `<button class="sbl-btn-join" onclick="window.anotarme('${tid}')">Anotar</button>`;
+      const companionForm = isPending ? `
+        <div class="companion-form">
+          <div class="companion-label">¿Venís con alguien?</div>
+          <input type="text" class="companion-input" id="ci-${tid}"
+            placeholder="Nombre del acompañante (opcional)" autocomplete="off"
+            onkeydown="if(event.key==='Enter') window.confirmarAnotar('${tid}')">
+          <div class="companion-btns">
+            <button class="companion-btn-solo" onclick="window.soloYo('${tid}')">Solo yo</button>
+            <button class="companion-btn-confirm" onclick="window.confirmarAnotar('${tid}')">Confirmar</button>
+          </div>
+        </div>
+      ` : "";
 
       html += `
         <div class="sbl-row ${rowBorderCls}">
@@ -818,15 +823,88 @@
             <div class="sbl-clock" style="color:${clockColor}">${clockSvg}</div>
             <div class="sbl-info">
               <div class="sbl-time">${bl.replace("-"," – ")}</div>
-              <div class="sbl-status">${statusText}</div>
+              <div class="sbl-status">${statusHtml}</div>
             </div>
             <div class="sbl-dots">${dots}</div>
-            <div class="sbl-action">${action}</div>
+            <div class="sbl-action">${actionHtml}</div>
           </div>
+          ${companionForm}
         </div>
       `;
     }
     document.getElementById("sheetBlocks").innerHTML = html;
+
+    if (pendingAnotarTid) {
+      const inp = document.getElementById(`ci-${pendingAnotarTid}`);
+      if (inp) setTimeout(() => inp.focus(), 50);
+    }
+  }
+
+  // ── MIS TURNOS VIEW ────────────────────────────────────
+  function renderMisTurnos() {
+    const el = document.getElementById("viewMisTurnos");
+    let html = `<div class="view-title">Mis Turnos</div>`;
+
+    const byDay = {};
+    for (const { dia, bloques, ubicaciones } of SCHEDULE) {
+      for (const bl of bloques) {
+        for (const ub of ubicaciones) {
+          const tid     = turnoId(dia, bl, ub);
+          const entries = Object.values(turnosData[tid]?.anotados || {});
+          if (entries.some(v => v.nombre === myName)) {
+            if (!byDay[dia]) byDay[dia] = [];
+            byDay[dia].push({ bl, ub, tid });
+          }
+        }
+      }
+    }
+
+    const hasTurnos = ALL_DAYS.some(d => byDay[d]);
+
+    if (!hasTurnos) {
+      html += `
+        <div class="mt-empty">
+          <div class="mt-empty-icon">
+            <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/>
+              <line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+            </svg>
+          </div>
+          <div class="mt-empty-title">No tenés turnos anotados esta semana</div>
+          <div class="mt-empty-sub">Tocá una celda en el inicio para anotarte</div>
+        </div>
+      `;
+    } else {
+      for (const dia of ALL_DAYS) {
+        if (!byDay[dia]) continue;
+        html += `<div class="mt-day-header">${dia}</div>`;
+        for (const { bl, ub, tid } of byDay[dia]) {
+          html += `
+            <div class="mt-card">
+              <div class="mt-card-info">
+                <div class="mt-card-loc">📍 ${escHtml(ub)}</div>
+                <div class="mt-card-time">🕐 ${bl.replace("-"," – ")}</div>
+              </div>
+              <button class="mt-btn-unannotate" onclick="window.desanotarme('${tid}')">Desanotarme</button>
+            </div>
+          `;
+        }
+      }
+    }
+
+    el.innerHTML = html;
+  }
+
+  // ── PERFIL VIEW ────────────────────────────────────────
+  function renderPerfil() {
+    document.getElementById("viewPerfil").innerHTML = `
+      <div class="view-title">Perfil</div>
+      <div class="perfil-card">
+        <div class="perfil-label">Tu nombre</div>
+        <div class="perfil-name">${escHtml(myName)}</div>
+        <button class="perfil-change-btn" onclick="showLogin()">Cambiar nombre</button>
+      </div>
+    `;
   }
 
   // ── BANNER ─────────────────────────────────────────────
@@ -865,7 +943,6 @@
     `).join("");
   }
 
-  // Primeros nombres, máximo 2 + "+N" si hay más
   function nameLabel(nameSet) {
     const arr   = [...nameSet];
     const shown = arr.slice(0, 2);
@@ -881,7 +958,6 @@
     const todayDow = new Date().getDay();
     let html = `<div class="grid-scroll-container"><div class="grid-wrap" id="gridWrap"><div class="schedule-grid">`;
 
-    // Header row: empty corner + 7 day labels
     html += `<div></div>`;
     for (const dia of ALL_DAYS) {
       const isToday = DAY_INDEX[dia] === todayDow;
@@ -893,7 +969,6 @@
       `;
     }
 
-    // One row per location
     for (const ub of ALL_LOCS) {
       html += `<div class="gl-loc">${escHtml(SHORT_LOC[ub]).replace("\n","<br>")}</div>`;
 
@@ -907,9 +982,7 @@
           continue;
         }
 
-        // Aggregate state across all blocks for this (día × ubicación) cell
         let isMine = false, anyFree = false, anyPeople = false, totalAnnotated = 0;
-        const names = new Set();
 
         for (const bl of bloques) {
           const vals  = Object.values(turnosData[turnoId(dia, bl, ub)]?.anotados || {});
@@ -918,37 +991,20 @@
           if (count < 4) anyFree = true;
           if (count > 0) anyPeople = true;
           totalAnnotated += count;
-          vals.forEach(v => { if (v.nombre !== myName) names.add(v.nombre.split(" ")[0]); });
         }
 
         if (isMine) {
-          html += `
-            <div class="gc gc-mine${todayCls}" data-dia="${escHtml(dia)}" data-ub="${escHtml(ub)}">
-              <div class="gc-dot"></div>
-              <span class="gc-text">✓ Vos</span>
-            </div>
-          `;
+          html += `<div class="gc gc-mine${todayCls}" data-dia="${escHtml(dia)}" data-ub="${escHtml(ub)}">
+            <div class="gc-dot"></div><span class="gc-text">✓ Vos</span></div>`;
         } else if (!anyFree) {
-          html += `
-            <div class="gc gc-full${todayCls}" data-dia="${escHtml(dia)}" data-ub="${escHtml(ub)}">
-              <div class="gc-dot"></div>
-              <span class="gc-text">Lleno</span>
-            </div>
-          `;
+          html += `<div class="gc gc-full${todayCls}" data-dia="${escHtml(dia)}" data-ub="${escHtml(ub)}">
+            <div class="gc-dot"></div><span class="gc-text">Lleno</span></div>`;
         } else if (anyPeople) {
-          html += `
-            <div class="gc gc-with-people${todayCls}" data-dia="${escHtml(dia)}" data-ub="${escHtml(ub)}">
-              <div class="gc-dot"></div>
-              <span class="gc-text">${totalAnnotated}</span>
-            </div>
-          `;
+          html += `<div class="gc gc-with-people${todayCls}" data-dia="${escHtml(dia)}" data-ub="${escHtml(ub)}">
+            <div class="gc-dot"></div><span class="gc-text">${totalAnnotated}</span></div>`;
         } else {
-          html += `
-            <div class="gc gc-free${todayCls}" data-dia="${escHtml(dia)}" data-ub="${escHtml(ub)}">
-              <div class="gc-dot"></div>
-              <span class="gc-text">—</span>
-            </div>
-          `;
+          html += `<div class="gc gc-free${todayCls}" data-dia="${escHtml(dia)}" data-ub="${escHtml(ub)}">
+            <div class="gc-dot"></div><span class="gc-text">—</span></div>`;
         }
       }
     }
@@ -958,7 +1014,6 @@
     setupScrollFade();
   }
 
-  // Gradiente derecho: desaparece cuando se llega al final del scroll
   function setupScrollFade() {
     const wrap = document.getElementById("gridWrap");
     const fade = document.getElementById("scrollFade");
@@ -971,7 +1026,6 @@
     update();
   }
 
-  // Grid cell click — event delegation, reads data-* attrs
   document.getElementById("appContent").addEventListener("click", e => {
     const cell = e.target.closest(".gc[data-dia]");
     if (!cell || cell.classList.contains("gc-none")) return;
