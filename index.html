@@ -202,11 +202,22 @@
       width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
     }
 
+    /* Scroll container con indicador de fade a la derecha */
+    .grid-scroll-container { position: relative; }
     .grid-wrap {
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
       padding: 0 12px;
     }
+    .scroll-fade {
+      position: absolute;
+      top: 0; right: 0; bottom: 0; width: 52px;
+      background: linear-gradient(to right, transparent, #f1f5f9);
+      pointer-events: none;
+      transition: opacity .18s;
+      z-index: 2;
+    }
+    .scroll-fade.hidden { opacity: 0; }
 
     .schedule-grid {
       display: grid;
@@ -222,7 +233,7 @@
       padding-bottom: 8px;
       display: flex; flex-direction: column; align-items: center; gap: 3px;
     }
-    .gh-day.gh-today { color: #2563eb; }
+    .gh-day.gh-today { color: #2563eb; font-weight: 800; }
     .gh-pip {
       width: 5px; height: 5px; border-radius: 50%;
       background: #2563eb;
@@ -248,17 +259,20 @@
       cursor: pointer;
       transition: filter .12s;
       overflow: hidden;
+      position: relative;
     }
     .gc:active { filter: brightness(.95); }
 
+    /* Sin turno ese día: fondo plano, sin borde, sin interacción */
     .gc-none {
-      background: rgba(0,0,0,0.02);
-      border: 1px dashed #e8edf2;
+      background: #f1f5f9;
       cursor: default;
     }
     .gc-none:active { filter: none; }
+
+    /* Con turno pero sin anotados */
     .gc-free {
-      background: #f8fafc;
+      background: #fff;
       border: 1px solid #e2e8f0;
     }
     .gc-with-people {
@@ -274,6 +288,21 @@
       border: 1px solid #fca5a5;
     }
 
+    /* Punto indicador "yo estoy anotado" */
+    .gc-pip {
+      position: absolute;
+      top: 5px; right: 5px;
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: #2563eb;
+      flex-shrink: 0;
+    }
+
+    /* Resalte sutil del día actual en todas las celdas activas */
+    .gc-today-col:not(.gc-none) {
+      box-shadow: inset 0 0 0 1.5px rgba(37,99,235,0.22);
+    }
+
     .gc-txt {
       font-size: 9px; font-weight: 600;
       line-height: 1.4;
@@ -282,10 +311,10 @@
       overflow: hidden;
       text-overflow: ellipsis;
     }
-    .gc-free .gc-txt      { color: #cbd5e1; }
-    .gc-with-people .gc-txt { color: #15803d; }
-    .gc-mine .gc-txt      { color: #1d4ed8; font-weight: 700; }
-    .gc-full .gc-txt      { color: #dc2626; }
+    .gc-free .gc-txt        { color: #cbd5e1; }
+    .gc-with-people .gc-txt { color: #64748b; }
+    .gc-mine .gc-txt        { color: #1d4ed8; }
+    .gc-full .gc-txt        { color: #dc2626; }
 
     /* ── BOTTOM SHEET ── */
     #sheetOverlay {
@@ -486,7 +515,7 @@
     "Hospital Garín":     "Hosp.\nGarín",
     "Estación Garín":     "Est.\nGarín",
     "Puente 5":           "Puente 5",
-    "Mini Estación Garín":"Mini\nEst."
+    "Mini Estación Garín":"Mini Est."
   };
 
   // "dia::ub" → [bloque, ...]
@@ -687,6 +716,14 @@
     `).join("");
   }
 
+  // Primeros nombres, máximo 2 + "+N" si hay más
+  function nameLabel(nameSet) {
+    const arr   = [...nameSet];
+    const shown = arr.slice(0, 2);
+    if (arr.length > 2) shown.push(`+${arr.length - 2}`);
+    return shown.join(", ");
+  }
+
   // ── RENDER GRID ────────────────────────────────────────
   function render() {
     if (!myName) { showLogin(); return; }
@@ -695,7 +732,6 @@
     const todayDow = new Date().getDay();
     let html = `<div class="grid-section">`;
 
-    // Legend (above scroll area, offset to align with day columns)
     html += `
       <div class="grid-legend">
         <div class="legend-item"><div class="legend-dot" style="background:#16a34a"></div>Con lugar</div>
@@ -704,7 +740,7 @@
       </div>
     `;
 
-    html += `<div class="grid-wrap"><div class="schedule-grid">`;
+    html += `<div class="grid-scroll-container"><div class="grid-wrap" id="gridWrap"><div class="schedule-grid">`;
 
     // Header row: empty corner + 7 day labels
     html += `<div></div>`;
@@ -723,13 +759,17 @@
       html += `<div class="gl-loc">${escHtml(SHORT_LOC[ub]).replace("\n","<br>")}</div>`;
 
       for (const dia of ALL_DAYS) {
-        const bloques = CELL_BLOCKS[`${dia}::${ub}`];
+        const isToday   = DAY_INDEX[dia] === todayDow;
+        const todayCls  = isToday ? " gc-today-col" : "";
+        const bloques   = CELL_BLOCKS[`${dia}::${ub}`];
+
         if (!bloques) {
+          // Sin turno: fondo plano, sin borde, sin interacción
           html += `<div class="gc gc-none"></div>`;
           continue;
         }
 
-        // Aggregate state across all blocks for this cell
+        // Aggregate state across all blocks for this (día × ubicación) cell
         let isMine = false, anyFree = false, anyPeople = false;
         const names = new Set();
 
@@ -742,32 +782,54 @@
           vals.forEach(v => { if (v.nombre !== myName) names.add(v.nombre.split(" ")[0]); });
         }
 
-        let cls, label;
         if (isMine) {
-          cls   = "gc-mine";
-          const extra = [...names].slice(0, 1);
-          label = "✓ " + ["Yo", ...extra].join(", ");
+          // Punto azul como indicador; nombres de otros en azul 9px
+          const label = nameLabel(names);
+          html += `
+            <div class="gc gc-mine${todayCls}" data-dia="${escHtml(dia)}" data-ub="${escHtml(ub)}">
+              <div class="gc-pip"></div>
+              ${label ? `<span class="gc-txt">${escHtml(label)}</span>` : ""}
+            </div>
+          `;
         } else if (!anyFree) {
-          cls   = "gc-full";
-          label = "lleno";
+          html += `
+            <div class="gc gc-full${todayCls}" data-dia="${escHtml(dia)}" data-ub="${escHtml(ub)}">
+              <span class="gc-txt">lleno</span>
+            </div>
+          `;
         } else if (anyPeople) {
-          cls   = "gc-with-people";
-          label = [...names].slice(0, 2).join(", ");
+          const label = nameLabel(names);
+          html += `
+            <div class="gc gc-with-people${todayCls}" data-dia="${escHtml(dia)}" data-ub="${escHtml(ub)}">
+              <span class="gc-txt">${escHtml(label)}</span>
+            </div>
+          `;
         } else {
-          cls   = "gc-free";
-          label = "libre";
+          html += `
+            <div class="gc gc-free${todayCls}" data-dia="${escHtml(dia)}" data-ub="${escHtml(ub)}">
+              <span class="gc-txt">libre</span>
+            </div>
+          `;
         }
-
-        html += `
-          <div class="gc ${cls}" data-dia="${escHtml(dia)}" data-ub="${escHtml(ub)}">
-            <span class="gc-txt">${escHtml(label)}</span>
-          </div>
-        `;
       }
     }
 
-    html += `</div></div></div>`;
+    html += `</div></div><div class="scroll-fade" id="scrollFade"></div></div></div>`;
     document.getElementById("appContent").innerHTML = html;
+    setupScrollFade();
+  }
+
+  // Gradiente derecho: desaparece cuando se llega al final del scroll
+  function setupScrollFade() {
+    const wrap = document.getElementById("gridWrap");
+    const fade = document.getElementById("scrollFade");
+    if (!wrap || !fade) return;
+    const update = () => {
+      const atEnd = Math.ceil(wrap.scrollLeft + wrap.clientWidth) >= wrap.scrollWidth;
+      fade.classList.toggle("hidden", atEnd);
+    };
+    wrap.addEventListener("scroll", update, { passive: true });
+    update();
   }
 
   // Grid cell click — event delegation, reads data-* attrs
