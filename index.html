@@ -4,28 +4,31 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Predicación Pública · Norte Garín</title>
-  <meta name="theme-color" content="#04091a" />
+  <meta name="theme-color" content="#f1f5f9" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="apple-mobile-web-app-title" content="Predicación · Norte Garín" />
   <meta name="description" content="Programa de predicación pública con exhibidores · Congregación Norte Garín" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800;900&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      background: #04091a;
-      color: #e2e8f0;
-      font-family: system-ui, -apple-system, sans-serif;
+      background: #f1f5f9;
+      color: #0f172a;
+      font-family: 'Outfit', system-ui, sans-serif;
       min-height: 100vh;
       font-size: 15px;
       -webkit-tap-highlight-color: transparent;
     }
 
-    /* ── LOGIN ── */
+    /* ── LOGIN SCREEN ── */
     #loginScreen {
       position: fixed; inset: 0;
-      background: #04091a;
+      background: #f1f5f9;
       z-index: 100;
       display: none;
       align-items: center;
@@ -34,70 +37,127 @@
     }
     #loginScreen.vis { display: flex; }
 
-    .login-box { width: 100%; max-width: 360px; text-align: center; }
+    .login-card {
+      width: 100%; max-width: 380px;
+      background: #fff;
+      border-radius: 20px;
+      padding: 40px 28px 32px;
+      box-shadow: 0 4px 40px rgba(15,23,42,0.10);
+      text-align: center;
+    }
     .login-eyebrow {
-      font-size: 12px; font-weight: 700;
+      font-size: 11px; font-weight: 700;
       letter-spacing: .18em; text-transform: uppercase;
-      color: #60a5fa; margin-bottom: 10px;
+      color: #94a3b8; margin-bottom: 10px;
     }
     .login-title {
       font-size: 28px; font-weight: 800;
-      color: #f1f5f9; line-height: 1.15; margin-bottom: 8px;
+      color: #0f172a; line-height: 1.15; margin-bottom: 6px;
     }
-    .login-sub { font-size: 15px; color: #64748b; margin-bottom: 44px; }
+    .login-sub { font-size: 13px; color: #94a3b8; margin-bottom: 36px; }
     .login-input {
       width: 100%;
-      background: #0f172a;
-      border: 1px solid rgba(255,255,255,0.1);
+      background: #fff;
+      border: 1.5px solid #e2e8f0;
       border-radius: 14px;
-      color: #f1f5f9;
-      padding: 18px 20px;
-      font-size: 17px;
+      color: #0f172a;
+      padding: 16px 20px;
+      font-size: 16px; font-family: 'Outfit', sans-serif;
       outline: none;
       transition: border-color .15s;
       margin-bottom: 14px;
       text-align: center;
     }
-    .login-input::placeholder { color: #475569; }
-    .login-input:focus { border-color: #60a5fa; }
+    .login-input::placeholder { color: #cbd5e1; }
+    .login-input:focus { border-color: #2563eb; }
     .login-btn {
       width: 100%;
       background: #2563eb;
       color: #fff; border: none;
       border-radius: 14px;
-      padding: 18px;
-      font-size: 17px; font-weight: 700;
+      padding: 16px;
+      font-size: 16px; font-weight: 700; font-family: 'Outfit', sans-serif;
       cursor: pointer; transition: background .15s;
     }
     .login-btn:active { background: #1d4ed8; }
 
-    /* ── HEADER ── */
-    #appHeader {
+    /* ── BANNER (sticky) ── */
+    #appBanner {
       display: none;
       position: sticky; top: 0; z-index: 40;
-      background: #04091a;
-      border-bottom: 1px solid rgba(255,255,255,0.07);
-      padding: 12px 16px;
+      background: #fff;
+      border-bottom: 2px solid #0f172a;
+      padding: 20px 20px 0;
     }
-    #appHeader.vis { display: block; }
-    .header-inner {
-      max-width: 720px; margin: 0 auto;
-      display: flex; align-items: center; justify-content: space-between;
+    #appBanner.vis { display: block; }
+
+    .banner-inner { max-width: 800px; margin: 0 auto; }
+
+    .banner-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 16px;
     }
-    .header-title { font-size: 16px; font-weight: 700; color: #f1f5f9; }
-    .header-sub   { font-size: 12px; color: #475569; margin-top: 1px; }
-    .user-pill {
-      background: rgba(96,165,250,0.1);
-      border: 1px solid rgba(96,165,250,0.25);
-      border-radius: 20px;
-      padding: 7px 14px;
-      font-size: 13px; color: #93c5fd;
-      cursor: pointer;
-      max-width: 170px;
-      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-      transition: background .15s;
+    .banner-eyebrow {
+      font-size: 10px; font-weight: 700;
+      letter-spacing: .14em; text-transform: uppercase;
+      color: #94a3b8; margin-bottom: 5px;
     }
-    .user-pill:active { background: rgba(96,165,250,0.2); }
+    .banner-brand {
+      display: flex; align-items: baseline; gap: 8px;
+    }
+    .banner-pp {
+      font-size: 32px; font-weight: 900;
+      color: #0f172a; line-height: 1;
+    }
+    .banner-pp-label {
+      font-size: 11px; font-weight: 600;
+      color: #64748b; line-height: 1.35;
+    }
+    .banner-right { text-align: right; }
+    .banner-user-label {
+      font-size: 10px; font-weight: 700;
+      letter-spacing: .12em; text-transform: uppercase;
+      color: #94a3b8; margin-bottom: 3px;
+    }
+    .banner-user-name {
+      font-size: 13px; font-weight: 700; color: #0f172a;
+      cursor: pointer; margin-bottom: 7px;
+      max-width: 150px; overflow: hidden;
+      text-overflow: ellipsis; white-space: nowrap;
+    }
+    .banner-user-name:active { color: #2563eb; }
+    .banner-dots {
+      display: flex; gap: 5px; justify-content: flex-end;
+    }
+    .banner-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+    }
+
+    /* Banner bottom: next turns */
+    .banner-bottom {
+      border-top: 1px solid #f1f5f9;
+      padding: 12px 0 14px;
+    }
+    .banner-bottom-label {
+      font-size: 9px; font-weight: 800;
+      letter-spacing: .15em; text-transform: uppercase;
+      color: #94a3b8; margin-bottom: 9px;
+    }
+    .banner-turns { display: flex; gap: 20px; }
+    .banner-turn { flex: 1; min-width: 0; }
+    .banner-turn-time {
+      font-size: 14px; font-weight: 700; color: #0f172a;
+      margin-bottom: 2px;
+    }
+    .banner-turn-loc {
+      font-size: 11px; font-weight: 600; color: #2563eb;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .banner-no-turns {
+      font-size: 13px; color: #94a3b8; font-style: italic;
+    }
 
     /* ── LOADING ── */
     #loadingState {
@@ -106,132 +166,126 @@
       padding: 100px 0;
     }
     .spinner {
-      width: 30px; height: 30px;
-      border: 2px solid rgba(255,255,255,0.1);
-      border-top-color: #60a5fa;
+      width: 28px; height: 28px;
+      border: 2.5px solid #e2e8f0;
+      border-top-color: #2563eb;
       border-radius: 50%;
       animation: spin .7s linear infinite;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-txt { font-size: 13px; color: #94a3b8; }
 
-    /* ── CONTENT ── */
+    /* ── APP CONTENT ── */
     #appContent {
       display: none;
-      max-width: 720px;
+      max-width: 800px;
       margin: 0 auto;
-      padding: 12px 0 100px;
+      padding: 16px 0 100px;
     }
     #appContent.vis { display: block; }
 
-    /* ── DAY SECTION ── */
-    .day-section {
-      margin-bottom: 24px;
-      scroll-margin-top: 72px;
+    /* ── GRID ── */
+    .grid-section { }
+
+    .grid-legend {
+      display: flex;
+      gap: 14px;
+      padding: 0 12px 10px 80px;
+      flex-wrap: wrap;
+    }
+    .legend-item {
+      display: flex; align-items: center; gap: 5px;
+      font-size: 10px; font-weight: 600; color: #64748b;
+    }
+    .legend-dot {
+      width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
     }
 
-    /* ── DAY HEADER ── */
-    .day-header {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 12px 16px;
-      background: #050c1a;
-      margin-bottom: 8px;
-    }
-    .day-accent {
-      width: 4px;
-      height: 20px;
-      background: #1e3a8a;
-      border-radius: 2px;
-      flex-shrink: 0;
-    }
-    .day-header.today .day-accent { background: #3b82f6; }
-    .day-name {
-      font-size: 14px; font-weight: 700;
-      letter-spacing: .1em; text-transform: uppercase;
-      color: #fff;
-      flex: 1;
-    }
-    .today-badge {
-      background: rgba(59,130,246,0.15);
-      color: #60a5fa;
-      border: 1px solid rgba(59,130,246,0.3);
-      border-radius: 20px;
-      padding: 2px 10px;
-      font-size: 11px; font-weight: 700;
-    }
-
-    /* ── LOCATION CARDS ── */
-    .loc-cards {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
+    .grid-wrap {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
       padding: 0 12px;
     }
-    .loc-card {
-      background: #0a1628;
-      border-radius: 10px;
-      border: 1px solid rgba(255,255,255,0.05);
-      padding: 12px 14px;
-    }
-    .loc-name {
-      font-size: 10px; font-weight: 700;
-      letter-spacing: 1.5px; text-transform: uppercase;
-      color: #475569;
-      margin-bottom: 10px;
-    }
 
-    /* ── CHIPS ── */
-    .chips-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-    .chip {
-      border-radius: 8px;
-      padding: 6px 10px;
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+    .schedule-grid {
+      display: grid;
+      grid-template-columns: 68px repeat(7, 1fr);
+      min-width: 520px;
       gap: 3px;
-      background: none;
-      font-family: inherit;
-      transition: filter .12s;
-      min-width: 58px;
-    }
-    .chip:active { filter: brightness(1.3); }
-    .chip-time {
-      font-size: 14px; font-weight: 600;
-      line-height: 1;
-    }
-    .chip-status {
-      font-size: 10px;
-      line-height: 1;
     }
 
-    .chip-libre {
-      background: #0d1117;
-      border: 1px solid rgba(255,255,255,0.05);
-      color: #64748b;
+    /* Day header cells */
+    .gh-day {
+      font-size: 10px; font-weight: 700;
+      text-align: center; color: #94a3b8;
+      padding-bottom: 8px;
+      display: flex; flex-direction: column; align-items: center; gap: 3px;
     }
-    .chip-with-people {
-      background: #051a0e;
-      border: 1px solid rgba(52,211,153,0.2);
-      color: #34d399;
+    .gh-day.gh-today { color: #2563eb; }
+    .gh-pip {
+      width: 5px; height: 5px; border-radius: 50%;
+      background: #2563eb;
     }
-    .chip-mine {
-      background: #0c1a3d;
-      border: 1.5px solid #3b82f6;
-      color: #60a5fa;
+
+    /* Location label */
+    .gl-loc {
+      font-size: 9px; font-weight: 700;
+      color: #94a3b8; text-transform: uppercase;
+      letter-spacing: .04em; line-height: 1.35;
+      display: flex; align-items: center;
+      padding-right: 4px;
     }
-    .chip-full {
-      background: #1a0808;
-      border: 1px solid rgba(248,113,113,0.3);
-      color: #f87171;
+
+    /* Grid cells */
+    .gc {
+      min-height: 56px;
+      border-radius: 8px;
+      padding: 6px 4px;
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: center;
+      text-align: center;
+      cursor: pointer;
+      transition: filter .12s;
+      overflow: hidden;
+    }
+    .gc:active { filter: brightness(.95); }
+
+    .gc-none {
+      background: rgba(0,0,0,0.02);
+      border: 1px dashed #e8edf2;
       cursor: default;
     }
+    .gc-none:active { filter: none; }
+    .gc-free {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+    }
+    .gc-with-people {
+      background: #dcfce7;
+      border: 1px solid #86efac;
+    }
+    .gc-mine {
+      background: #dbeafe;
+      border: 1px solid #93c5fd;
+    }
+    .gc-full {
+      background: #fee2e2;
+      border: 1px solid #fca5a5;
+    }
+
+    .gc-txt {
+      font-size: 9px; font-weight: 600;
+      line-height: 1.4;
+      display: block;
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .gc-free .gc-txt      { color: #cbd5e1; }
+    .gc-with-people .gc-txt { color: #15803d; }
+    .gc-mine .gc-txt      { color: #1d4ed8; font-weight: 700; }
+    .gc-full .gc-txt      { color: #dc2626; }
 
     /* ── BOTTOM SHEET ── */
     #sheetOverlay {
@@ -240,102 +294,139 @@
       z-index: 60; display: none;
       transition: background .25s;
     }
-    #sheetOverlay.open { display: block; background: rgba(0,0,0,0.65); }
+    #sheetOverlay.open { display: block; background: rgba(15,23,42,0.45); }
 
     #bottomSheet {
       position: fixed;
       bottom: 0; left: 0; right: 0;
-      background: #0f172a;
-      border: 1px solid rgba(255,255,255,0.08);
-      border-bottom: none;
+      background: #fff;
       border-radius: 20px 20px 0 0;
-      padding: 0 20px calc(24px + env(safe-area-inset-bottom));
+      padding: 0 20px calc(28px + env(safe-area-inset-bottom));
       z-index: 61;
       transform: translateY(100%);
       transition: transform .3s cubic-bezier(.32,.72,0,1);
       max-width: 640px;
       margin: 0 auto;
+      max-height: 88vh;
+      overflow-y: auto;
     }
     #bottomSheet.open { transform: translateY(0); }
 
     .sheet-handle {
       width: 36px; height: 4px;
-      background: rgba(255,255,255,0.13);
+      background: #e2e8f0;
       border-radius: 2px;
-      margin: 14px auto 20px;
+      margin: 12px auto 18px;
     }
-    .sheet-title {
-      font-size: 18px; font-weight: 700;
-      color: #f1f5f9; margin-bottom: 3px;
-    }
-    .sheet-subtitle { font-size: 13px; color: #64748b; margin-bottom: 20px; }
 
-    .sheet-anotados {
-      background: #080f1e;
-      border: 1px solid rgba(255,255,255,0.06);
-      border-radius: 12px;
-      padding: 4px 14px;
-      margin-bottom: 14px;
-      min-height: 52px;
+    .sheet-loc {
+      font-size: 17px; font-weight: 800;
+      color: #0f172a; margin-bottom: 3px;
     }
-    .sheet-person {
-      display: flex; align-items: center; gap: 9px;
-      padding: 10px 0;
-      font-size: 15px; color: #cbd5e1;
-      border-bottom: 1px solid rgba(255,255,255,0.04);
+    .sheet-day-lbl {
+      font-size: 13px; font-weight: 600;
+      color: #2563eb; margin-bottom: 20px;
     }
-    .sheet-person:last-child { border-bottom: none; }
-    .sheet-person.is-me { color: #93c5fd; font-weight: 700; }
-    .sheet-empty {
-      font-size: 13px; color: #475569;
-      text-align: center; padding: 14px 0;
+    .sheet-section-lbl {
+      font-size: 9px; font-weight: 800;
+      letter-spacing: .15em; text-transform: uppercase;
+      color: #94a3b8; margin-bottom: 10px;
     }
-    .sheet-spots {
-      font-size: 14px; color: #64748b;
-      text-align: center; margin-bottom: 16px;
+
+    /* Block rows */
+    .sbl-row {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 8px;
     }
-    .sheet-btn {
-      width: 100%; border: none; border-radius: 14px;
-      padding: 17px; font-size: 16px; font-weight: 700;
+    .sbl-top {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 8px;
+    }
+    .sbl-time {
+      font-size: 13px; font-weight: 700; color: #0f172a;
+      flex-shrink: 0; min-width: 96px;
+    }
+    .sbl-dots {
+      display: flex; gap: 5px; flex: 1;
+    }
+    .sbl-dot {
+      width: 11px; height: 11px; border-radius: 50%;
+      background: #e2e8f0; flex-shrink: 0;
+    }
+    .sbl-dot.dot-taken { background: #94a3b8; }
+    .sbl-dot.dot-mine  { background: #2563eb; }
+    .sbl-action { flex-shrink: 0; }
+
+    .sbl-btn {
+      border: none; border-radius: 8px;
+      padding: 7px 12px;
+      font-size: 12px; font-weight: 700;
+      font-family: 'Outfit', sans-serif;
       cursor: pointer; transition: filter .12s;
     }
-    .sheet-btn:active { filter: brightness(.9); }
-    .sheet-btn-join  { background: #15803d; color: #fff; }
-    .sheet-btn-leave { background: rgba(248,113,113,0.12); color: #f87171; border: 1px solid rgba(248,113,113,0.28); }
-    .sheet-btn-full  { background: #1e293b; color: #475569; cursor: default; font-weight: 600; }
+    .sbl-btn:active { filter: brightness(.93); }
+    .sbl-btn-join  { background: #2563eb; color: #fff; }
+    .sbl-btn-leave { background: #fee2e2; color: #dc2626; border: 1px solid #fca5a5; }
+    .sbl-btn-full  { background: #f1f5f9; color: #94a3b8; cursor: default; font-weight: 600; }
+
+    .sbl-names {
+      font-size: 11px; color: #64748b; line-height: 1.5;
+    }
+    .sbl-names .sbl-mine { color: #2563eb; font-weight: 700; }
+    .sbl-names .sbl-empty { color: #cbd5e1; font-style: italic; }
   </style>
 </head>
 <body>
 
 <!-- LOGIN SCREEN -->
 <div id="loginScreen">
-  <div class="login-box">
-    <div class="login-eyebrow">Norte Garín</div>
-    <div class="login-title">Predicación<br>Pública</div>
+  <div class="login-card">
+    <div class="login-eyebrow">Norte Garín · 2026</div>
+    <div class="login-title">Predicación Pública</div>
     <div class="login-sub">Ingresá tu nombre para ver y anotarte en los turnos</div>
     <input type="text" id="nameInput" class="login-input" placeholder="Tu nombre completo" autocomplete="name" />
     <button class="login-btn" onclick="saveName()">Ingresar</button>
   </div>
 </div>
 
-<!-- HEADER -->
-<header id="appHeader">
-  <div class="header-inner">
-    <div>
-      <div class="header-title">Predicación Pública</div>
-      <div class="header-sub">Norte Garín</div>
+<!-- BANNER -->
+<header id="appBanner">
+  <div class="banner-inner">
+    <div class="banner-top">
+      <div class="banner-left">
+        <div class="banner-eyebrow">Norte Garín · 2026</div>
+        <div class="banner-brand">
+          <span class="banner-pp">PP</span>
+          <span class="banner-pp-label">Predicación /<br>Pública</span>
+        </div>
+      </div>
+      <div class="banner-right">
+        <div class="banner-user-label">Publicador</div>
+        <div id="bannerUserName" class="banner-user-name" onclick="showLogin()" title="Cambiar nombre"></div>
+        <div class="banner-dots">
+          <div class="banner-dot" style="background:#2563eb"></div>
+          <div class="banner-dot" style="background:#16a34a"></div>
+          <div class="banner-dot" style="background:#ca8a04"></div>
+        </div>
+      </div>
     </div>
-    <div id="userPill" class="user-pill" onclick="showLogin()" title="Cambiar nombre"></div>
+    <div class="banner-bottom">
+      <div class="banner-bottom-label">Mi próximo turno</div>
+      <div id="bannerTurns" class="banner-turns"></div>
+    </div>
   </div>
 </header>
 
 <!-- LOADING -->
 <div id="loadingState">
   <div class="spinner"></div>
-  <div style="font-size:14px;color:#475569">Cargando programa...</div>
+  <div class="loading-txt">Cargando programa...</div>
 </div>
 
-<!-- CONTENT -->
+<!-- APP CONTENT (grid) -->
 <div id="appContent"></div>
 
 <!-- SHEET OVERLAY -->
@@ -344,11 +435,10 @@
 <!-- BOTTOM SHEET -->
 <div id="bottomSheet">
   <div class="sheet-handle"></div>
-  <div id="sheetTitle" class="sheet-title"></div>
-  <div id="sheetSubtitle" class="sheet-subtitle"></div>
-  <div id="sheetAnotados" class="sheet-anotados"></div>
-  <div id="sheetSpots" class="sheet-spots"></div>
-  <button id="sheetBtn" class="sheet-btn"></button>
+  <div id="sheetLoc" class="sheet-loc"></div>
+  <div id="sheetDayLbl" class="sheet-day-lbl"></div>
+  <div class="sheet-section-lbl">Horarios</div>
+  <div id="sheetBlocks"></div>
 </div>
 
 <!-- Firebase -->
@@ -369,21 +459,43 @@
   firebase.initializeApp(firebaseConfig);
   const db = firebase.database();
 
+  // ── SCHEDULE DATA ──────────────────────────────────────
   const UBICACIONES_SEMANA = ["Hospital Garín", "Estación Garín", "Puente 5"];
   const UBICACION_DOMINGO  = ["Mini Estación Garín"];
 
   const SCHEDULE = [
-    { dia: "Lunes",     bloques: ["07:00-08:00","08:00-09:00","15:00-16:00","16:00-17:00"],                         ubicaciones: UBICACIONES_SEMANA },
-    { dia: "Martes",    bloques: ["07:00-08:00","08:00-09:00","09:00-10:00","10:00-11:00","11:00-12:00"],            ubicaciones: UBICACIONES_SEMANA },
-    { dia: "Miércoles", bloques: ["15:00-16:00","16:00-17:00","17:00-18:00","18:00-19:00","19:00-20:00"],            ubicaciones: UBICACIONES_SEMANA },
-    { dia: "Jueves",    bloques: ["07:00-08:00","08:00-09:00"],                                                      ubicaciones: UBICACIONES_SEMANA },
-    { dia: "Viernes",   bloques: ["07:00-08:00","08:00-09:00","17:00-18:00","18:00-19:00","19:00-20:00"],            ubicaciones: UBICACIONES_SEMANA },
-    { dia: "Sábado",    bloques: ["07:00-08:00","08:00-09:00"],                                                      ubicaciones: UBICACIONES_SEMANA },
-    { dia: "Domingo",   bloques: ["17:00-18:00","18:00-19:00","19:00-20:00"],                                        ubicaciones: UBICACION_DOMINGO  },
+    { dia: "Lunes",     bloques: ["07:00-08:00","08:00-09:00","15:00-16:00","16:00-17:00"],                        ubicaciones: UBICACIONES_SEMANA },
+    { dia: "Martes",    bloques: ["07:00-08:00","08:00-09:00","09:00-10:00","10:00-11:00","11:00-12:00"],           ubicaciones: UBICACIONES_SEMANA },
+    { dia: "Miércoles", bloques: ["15:00-16:00","16:00-17:00","17:00-18:00","18:00-19:00","19:00-20:00"],           ubicaciones: UBICACIONES_SEMANA },
+    { dia: "Jueves",    bloques: ["07:00-08:00","08:00-09:00"],                                                     ubicaciones: UBICACIONES_SEMANA },
+    { dia: "Viernes",   bloques: ["07:00-08:00","08:00-09:00","17:00-18:00","18:00-19:00","19:00-20:00"],           ubicaciones: UBICACIONES_SEMANA },
+    { dia: "Sábado",    bloques: ["07:00-08:00","08:00-09:00"],                                                     ubicaciones: UBICACIONES_SEMANA },
+    { dia: "Domingo",   bloques: ["17:00-18:00","18:00-19:00","19:00-20:00"],                                       ubicaciones: UBICACION_DOMINGO  },
   ];
 
   const DAY_INDEX = { "Lunes":1,"Martes":2,"Miércoles":3,"Jueves":4,"Viernes":5,"Sábado":6,"Domingo":0 };
 
+  const ALL_LOCS  = ["Hospital Garín","Estación Garín","Puente 5","Mini Estación Garín"];
+  const ALL_DAYS  = ["Lunes","Martes","Miércoles","Jueves","Viernes","Sábado","Domingo"];
+
+  const SHORT_DAYS = {
+    "Lunes":"Lun","Martes":"Mar","Miércoles":"Mié",
+    "Jueves":"Jue","Viernes":"Vie","Sábado":"Sáb","Domingo":"Dom"
+  };
+  const SHORT_LOC = {
+    "Hospital Garín":     "Hosp.\nGarín",
+    "Estación Garín":     "Est.\nGarín",
+    "Puente 5":           "Puente 5",
+    "Mini Estación Garín":"Mini\nEst."
+  };
+
+  // "dia::ub" → [bloque, ...]
+  const CELL_BLOCKS = {};
+  for (const { dia, bloques, ubicaciones } of SCHEDULE) {
+    for (const ub of ubicaciones) CELL_BLOCKS[`${dia}::${ub}`] = bloques;
+  }
+
+  // ── HELPERS ────────────────────────────────────────────
   function turnoId(dia, bloque, ubicacion) {
     const [ini, fin] = bloque.split("-");
     const d = dia.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"");
@@ -391,25 +503,20 @@
     return `${d}_${ini.replace(":","")}_${fin.replace(":","")}_${u}`;
   }
 
-  function daySlug(dia) {
-    return dia.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"");
-  }
-
   function escHtml(s) {
     return String(s)
-      .replace(/&/g,"&amp;")
-      .replace(/</g,"&lt;")
-      .replace(/>/g,"&gt;")
-      .replace(/"/g,"&quot;");
+      .replace(/&/g,"&amp;").replace(/</g,"&lt;")
+      .replace(/>/g,"&gt;").replace(/"/g,"&quot;");
   }
 
+  // ── STATE ──────────────────────────────────────────────
   let myName       = localStorage.getItem("predicacion_nombre") || "";
   let turnosData   = {};
   let fbLoaded     = false;
-  let scrolledOnce = false;
-  let sheetTid     = null;
+  let sheetCellDia = null;
+  let sheetCellUb  = null;
 
-  // ── NAME ──────────────────────────────────────────────
+  // ── NAME ───────────────────────────────────────────────
   window.saveName = function() {
     const v = document.getElementById("nameInput").value.trim();
     if (!v) return;
@@ -422,45 +529,39 @@
   window.showLogin = function() {
     document.getElementById("nameInput").value = myName;
     document.getElementById("loginScreen").classList.add("vis");
-    document.getElementById("appHeader").classList.remove("vis");
+    document.getElementById("appBanner").classList.remove("vis");
     document.getElementById("appContent").classList.remove("vis");
     setTimeout(() => document.getElementById("nameInput").focus(), 80);
   };
 
   function hideLogin() {
     document.getElementById("loginScreen").classList.remove("vis");
-    document.getElementById("appHeader").classList.add("vis");
+    document.getElementById("appBanner").classList.add("vis");
     document.getElementById("appContent").classList.add("vis");
-    document.getElementById("userPill").textContent = myName;
   }
 
   document.getElementById("nameInput").addEventListener("keydown", e => {
     if (e.key === "Enter") window.saveName();
   });
 
-  // ── FIREBASE ──────────────────────────────────────────
+  // ── FIREBASE ───────────────────────────────────────────
   const turnosRef = db.ref("predicacion/turnos");
   turnosRef.on("value", snap => {
     turnosData = snap.val() || {};
-    fbLoaded = true;
+    fbLoaded   = true;
     document.getElementById("loadingState").style.display = "none";
-    if (myName) {
-      hideLogin();
-      render();
-    }
-    if (sheetTid) refreshSheet();
+    if (myName) { hideLogin(); render(); }
+    if (sheetCellDia) refreshSheet();
   });
 
   window.anotarme = async function(tid) {
-    const turno = turnosData[tid] || {};
-    const anotados = turno.anotados || {};
+    const anotados = turnosData[tid]?.anotados || {};
     if (Object.keys(anotados).length >= 4) return;
     await db.ref(`predicacion/turnos/${tid}/anotados`).push({ nombre: myName, timestamp: Date.now() });
   };
 
   window.desanotarme = async function(tid) {
-    const turno = turnosData[tid] || {};
-    const anotados = turno.anotados || {};
+    const anotados = turnosData[tid]?.anotados || {};
     for (const [pid, val] of Object.entries(anotados)) {
       if (val.nombre === myName) {
         await db.ref(`predicacion/turnos/${tid}/anotados/${pid}`).remove();
@@ -469,163 +570,217 @@
     }
   };
 
-  // ── BOTTOM SHEET ──────────────────────────────────────
-  window.openSheet = function(tid, dia, bloque, ubicacion) {
-    sheetTid = tid;
-    document.getElementById("sheetTitle").textContent = `${ubicacion} · ${bloque.replace("-"," – ")}`;
-    document.getElementById("sheetSubtitle").textContent = dia;
+  // ── BOTTOM SHEET ───────────────────────────────────────
+  window.openSheet = function(dia, ub) {
+    sheetCellDia = dia;
+    sheetCellUb  = ub;
+    document.getElementById("sheetLoc").textContent    = ub;
+    document.getElementById("sheetDayLbl").textContent = dia;
     refreshSheet();
     document.getElementById("sheetOverlay").classList.add("open");
     document.getElementById("bottomSheet").classList.add("open");
+    document.body.style.overflow = "hidden";
   };
 
   window.closeSheet = function() {
-    sheetTid = null;
+    sheetCellDia = null;
+    sheetCellUb  = null;
     document.getElementById("sheetOverlay").classList.remove("open");
     document.getElementById("bottomSheet").classList.remove("open");
+    document.body.style.overflow = "";
   };
 
   function refreshSheet() {
-    if (!sheetTid) return;
-    const tid      = sheetTid;
-    const turno    = turnosData[tid] || {};
-    const entries  = Object.entries(turno.anotados || {}).sort((a,b) => a[1].timestamp - b[1].timestamp);
-    const count    = entries.length;
-    const isMine   = entries.some(([,v]) => v.nombre === myName);
-    const full     = count >= 4;
-    const spotsLeft = 4 - count;
+    if (!sheetCellDia) return;
+    const dia    = sheetCellDia;
+    const ub     = sheetCellUb;
+    const bloques = CELL_BLOCKS[`${dia}::${ub}`] || [];
 
-    const iconPerson = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#475569" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>`;
-    const iconCheck  = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#93c5fd" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>`;
+    let html = "";
+    for (const bl of bloques) {
+      const tid     = turnoId(dia, bl, ub);
+      const entries = Object.entries(turnosData[tid]?.anotados || {})
+                            .sort((a,b) => a[1].timestamp - b[1].timestamp);
+      const count   = entries.length;
+      const isMine  = entries.some(([,v]) => v.nombre === myName);
+      const full    = count >= 4;
 
-    const anotadosEl = document.getElementById("sheetAnotados");
-    if (count === 0) {
-      anotadosEl.innerHTML = '<div class="sheet-empty">Nadie anotado aún</div>';
-    } else {
-      anotadosEl.innerHTML = entries.map(([,v]) => {
-        const me = v.nombre === myName;
-        return `<div class="sheet-person ${me ? "is-me" : ""}">${me ? iconCheck : iconPerson}${escHtml(v.nombre)}</div>`;
-      }).join("");
-    }
-
-    document.getElementById("sheetSpots").textContent = full
-      ? "Turno completo"
-      : `Quedan ${spotsLeft} lugar${spotsLeft === 1 ? "" : "es"}`;
-
-    const btn = document.getElementById("sheetBtn");
-    if (isMine) {
-      btn.textContent = "Desanotarme";
-      btn.className   = "sheet-btn sheet-btn-leave";
-      btn.onclick     = () => { window.desanotarme(tid); window.closeSheet(); };
-    } else if (full) {
-      btn.textContent = "Turno completo";
-      btn.className   = "sheet-btn sheet-btn-full";
-      btn.onclick     = null;
-    } else {
-      btn.textContent = "Anotarme";
-      btn.className   = "sheet-btn sheet-btn-join";
-      btn.onclick     = () => { window.anotarme(tid); window.closeSheet(); };
-    }
-  }
-
-  // ── RENDER ────────────────────────────────────────────
-  function render() {
-    if (!myName) { showLogin(); return; }
-    document.getElementById("userPill").textContent = myName;
-
-    const todayDow = new Date().getDay();
-    let todayDia   = null;
-    let html       = "";
-
-    for (const { dia, bloques, ubicaciones } of SCHEDULE) {
-      const isToday = DAY_INDEX[dia] === todayDow;
-      if (isToday) todayDia = dia;
-      const slug = daySlug(dia);
-
-      html += `<div class="day-section" id="day-${slug}">`;
-
-      html += `
-        <div class="day-header${isToday ? " today" : ""}">
-          <div class="day-accent"></div>
-          <span class="day-name">${escHtml(dia)}</span>
-          ${isToday ? '<span class="today-badge">HOY</span>' : ""}
-        </div>
-      `;
-
-      html += `<div class="loc-cards">`;
-
-      for (const ub of ubicaciones) {
-        html += `
-          <div class="loc-card">
-            <div class="loc-name">${escHtml(ub)}</div>
-            <div class="chips-row">
-        `;
-
-        for (const bl of bloques) {
-          const tid     = turnoId(dia, bl, ub);
-          const entries = Object.entries((turnosData[tid]?.anotados) || {})
-                                .sort((a,b) => a[1].timestamp - b[1].timestamp);
-          const count   = entries.length;
-          const isMine  = entries.some(([,v]) => v.nombre === myName);
-          const full    = count >= 4;
-
-          const startTime = bl.split("-")[0];
-
-          let chipClass, statusText;
-          if (isMine) {
-            chipClass  = "chip-mine";
-            statusText = "Anotado";
-          } else if (full) {
-            chipClass  = "chip-full";
-            statusText = "Lleno";
-          } else if (count > 0) {
-            chipClass  = "chip-with-people";
-            statusText = `${count}/4`;
-          } else {
-            chipClass  = "chip-libre";
-            statusText = "Libre";
-          }
-
-          // data-* attributes avoid the double-quote escaping bug of inline onclick
-          html += `
-            <button class="chip ${chipClass}"
-                    data-tid="${escHtml(tid)}"
-                    data-dia="${escHtml(dia)}"
-                    data-bl="${escHtml(bl)}"
-                    data-ub="${escHtml(ub)}">
-              <span class="chip-time">${startTime}</span>
-              <span class="chip-status">${statusText}</span>
-            </button>
-          `;
+      // 4 availability dots
+      const dots = Array.from({length: 4}, (_, i) => {
+        if (i < count) {
+          const cls = entries[i][1].nombre === myName ? "dot-mine" : "dot-taken";
+          return `<div class="sbl-dot ${cls}"></div>`;
         }
+        return `<div class="sbl-dot"></div>`;
+      }).join("");
 
-        html += `</div></div>`; // chips-row · loc-card
+      // Per-block action — tid is safe ASCII, inline onclick is fine
+      let actionBtn;
+      if (isMine) {
+        actionBtn = `<button class="sbl-btn sbl-btn-leave" onclick="window.desanotarme('${tid}')">Desanotarme</button>`;
+      } else if (full) {
+        actionBtn = `<button class="sbl-btn sbl-btn-full" disabled>Lleno</button>`;
+      } else {
+        actionBtn = `<button class="sbl-btn sbl-btn-join" onclick="window.anotarme('${tid}')">Anotarme</button>`;
       }
 
-      html += `</div></div>`; // loc-cards · day-section
-    }
+      // Names
+      let namesHtml;
+      if (entries.length === 0) {
+        namesHtml = `<span class="sbl-empty">Sin anotados</span>`;
+      } else {
+        namesHtml = entries.map(([,v]) => {
+          const me = v.nombre === myName;
+          return me
+            ? `<span class="sbl-mine">✓ ${escHtml(v.nombre)}</span>`
+            : escHtml(v.nombre);
+        }).join(" · ");
+      }
 
-    document.getElementById("appContent").innerHTML = html;
-
-    if (!scrolledOnce && todayDia) {
-      scrolledOnce = true;
-      const el = document.getElementById("day-" + daySlug(todayDia));
-      if (el) setTimeout(() => el.scrollIntoView({ behavior: "smooth", block: "start" }), 180);
+      html += `
+        <div class="sbl-row">
+          <div class="sbl-top">
+            <span class="sbl-time">${bl.replace("-"," – ")}</span>
+            <div class="sbl-dots">${dots}</div>
+            <div class="sbl-action">${actionBtn}</div>
+          </div>
+          <div class="sbl-names">${namesHtml}</div>
+        </div>
+      `;
     }
+    document.getElementById("sheetBlocks").innerHTML = html;
   }
 
-  // Chip click via event delegation — reads data-* attributes, no escaping issues
+  // ── BANNER ─────────────────────────────────────────────
+  function getMyTurns() {
+    const todayDow = new Date().getDay();
+    const turns    = [];
+    for (const { dia, bloques, ubicaciones } of SCHEDULE) {
+      const dow = DAY_INDEX[dia];
+      for (const bl of bloques) {
+        for (const ub of ubicaciones) {
+          const vals = Object.values(turnosData[turnoId(dia, bl, ub)]?.anotados || {});
+          if (vals.some(v => v.nombre === myName)) {
+            turns.push({ dia, bl, ub, dist: (dow - todayDow + 7) % 7 });
+          }
+        }
+      }
+    }
+    return turns
+      .sort((a, b) => a.dist !== b.dist ? a.dist - b.dist : a.bl.localeCompare(b.bl))
+      .slice(0, 2);
+  }
+
+  function renderBanner() {
+    document.getElementById("bannerUserName").textContent = myName;
+    const turns = getMyTurns();
+    const el    = document.getElementById("bannerTurns");
+    if (turns.length === 0) {
+      el.innerHTML = `<span class="banner-no-turns">Sin turnos esta semana</span>`;
+      return;
+    }
+    el.innerHTML = turns.map(t => `
+      <div class="banner-turn">
+        <div class="banner-turn-time">${SHORT_DAYS[t.dia]} · ${t.bl.split("-")[0]}</div>
+        <div class="banner-turn-loc">${escHtml(t.ub)}</div>
+      </div>
+    `).join("");
+  }
+
+  // ── RENDER GRID ────────────────────────────────────────
+  function render() {
+    if (!myName) { showLogin(); return; }
+    renderBanner();
+
+    const todayDow = new Date().getDay();
+    let html = `<div class="grid-section">`;
+
+    // Legend (above scroll area, offset to align with day columns)
+    html += `
+      <div class="grid-legend">
+        <div class="legend-item"><div class="legend-dot" style="background:#16a34a"></div>Con lugar</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#2563eb"></div>Yo anotado</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#ef4444"></div>Completo</div>
+      </div>
+    `;
+
+    html += `<div class="grid-wrap"><div class="schedule-grid">`;
+
+    // Header row: empty corner + 7 day labels
+    html += `<div></div>`;
+    for (const dia of ALL_DAYS) {
+      const isToday = DAY_INDEX[dia] === todayDow;
+      html += `
+        <div class="gh-day${isToday ? " gh-today" : ""}">
+          <span>${SHORT_DAYS[dia]}</span>
+          ${isToday ? `<div class="gh-pip"></div>` : ""}
+        </div>
+      `;
+    }
+
+    // One row per location
+    for (const ub of ALL_LOCS) {
+      html += `<div class="gl-loc">${escHtml(SHORT_LOC[ub]).replace("\n","<br>")}</div>`;
+
+      for (const dia of ALL_DAYS) {
+        const bloques = CELL_BLOCKS[`${dia}::${ub}`];
+        if (!bloques) {
+          html += `<div class="gc gc-none"></div>`;
+          continue;
+        }
+
+        // Aggregate state across all blocks for this cell
+        let isMine = false, anyFree = false, anyPeople = false;
+        const names = new Set();
+
+        for (const bl of bloques) {
+          const vals  = Object.values(turnosData[turnoId(dia, bl, ub)]?.anotados || {});
+          const count = vals.length;
+          if (vals.some(v => v.nombre === myName)) isMine = true;
+          if (count < 4) anyFree = true;
+          if (count > 0) anyPeople = true;
+          vals.forEach(v => { if (v.nombre !== myName) names.add(v.nombre.split(" ")[0]); });
+        }
+
+        let cls, label;
+        if (isMine) {
+          cls   = "gc-mine";
+          const extra = [...names].slice(0, 1);
+          label = "✓ " + ["Yo", ...extra].join(", ");
+        } else if (!anyFree) {
+          cls   = "gc-full";
+          label = "lleno";
+        } else if (anyPeople) {
+          cls   = "gc-with-people";
+          label = [...names].slice(0, 2).join(", ");
+        } else {
+          cls   = "gc-free";
+          label = "libre";
+        }
+
+        html += `
+          <div class="gc ${cls}" data-dia="${escHtml(dia)}" data-ub="${escHtml(ub)}">
+            <span class="gc-txt">${escHtml(label)}</span>
+          </div>
+        `;
+      }
+    }
+
+    html += `</div></div></div>`;
+    document.getElementById("appContent").innerHTML = html;
+  }
+
+  // Grid cell click — event delegation, reads data-* attrs
   document.getElementById("appContent").addEventListener("click", e => {
-    const chip = e.target.closest(".chip[data-tid]");
-    if (!chip) return;
-    window.openSheet(chip.dataset.tid, chip.dataset.dia, chip.dataset.bl, chip.dataset.ub);
+    const cell = e.target.closest(".gc[data-dia]");
+    if (!cell || cell.classList.contains("gc-none")) return;
+    window.openSheet(cell.dataset.dia, cell.dataset.ub);
   });
 
-  // ── INIT ──────────────────────────────────────────────
+  // ── INIT ───────────────────────────────────────────────
   if (!myName) {
     showLogin();
   } else {
-    document.getElementById("userPill").textContent = myName;
     hideLogin();
   }
 </script>
