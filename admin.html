@@ -17,13 +17,42 @@
     .badge-red    { background:rgba(248,113,113,0.15); color:#f87171; border:1px solid rgba(248,113,113,0.3); border-radius:20px; padding:2px 10px; font-size:12px; }
     .btn-danger-sm { background:rgba(248,113,113,0.1); color:#f87171; border:1px solid rgba(248,113,113,0.2); border-radius:6px; padding:3px 10px; font-size:12px; cursor:pointer; }
     .btn-danger-sm:hover { background: rgba(248,113,113,0.2); }
+    .btn-add-sm { background:rgba(96,165,250,0.1); color:#60a5fa; border:1px solid rgba(96,165,250,0.2); border-radius:6px; padding:4px 12px; font-size:12px; cursor:pointer; }
+    .btn-add-sm:hover { background:rgba(96,165,250,0.2); }
     .spinner { width:32px; height:32px; border:2px solid rgba(255,255,255,0.15); border-top-color:#60a5fa; border-radius:50%; animation:spin 0.7s linear infinite; margin:0 auto 12px; }
     @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* TABS */
+    .tab-btn { background:rgba(255,255,255,0.06); color:#94a3b8; border:1px solid rgba(255,255,255,0.08); border-radius:8px; padding:8px 16px; font-size:13px; cursor:pointer; transition:all .15s; }
+    .tab-btn.active { background:#2563eb; color:#fff; border-color:#2563eb; }
+
+    /* SCHEDULE EDITOR */
+    .sch-day-card { background:#0f172a; border:1px solid rgba(255,255,255,0.08); border-radius:12px; margin-bottom:14px; overflow:hidden; }
+    .sch-day-header { padding:12px 16px; border-bottom:1px solid rgba(255,255,255,0.05); display:flex; align-items:center; justify-content:space-between; gap:8px; flex-wrap:wrap; }
+    .sch-day-title { font-weight:700; font-size:15px; color:#e2e8f0; }
+    .sch-day-body { padding:14px 16px; }
+    .sch-ub-group { margin-bottom:16px; }
+    .sch-ub-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; gap:8px; }
+    .sch-ub-label { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:#64748b; }
+    .sch-bloque-row { display:flex; align-items:center; gap:8px; background:rgba(255,255,255,0.03); border-radius:6px; padding:6px 10px; margin-bottom:4px; }
+    .sch-bloque-time { flex:1; font-size:13px; font-weight:600; color:#cbd5e1; }
+    .sch-cupo-input { width:52px; background:#1e293b; border:1px solid rgba(255,255,255,0.12); border-radius:6px; color:#e2e8f0; font-size:13px; padding:4px 8px; text-align:center; outline:none; }
+    .sch-cupo-input:focus { border-color:#60a5fa; }
+    .sch-cupo-lbl { font-size:11px; color:#475569; flex-shrink:0; }
+    .add-form { background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:8px; padding:12px; margin-top:8px; display:none; }
+    .add-form.open { display:block; }
+    .add-form-row { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px; }
+    .af-input { background:#1e293b; border:1px solid rgba(255,255,255,0.12); border-radius:6px; color:#e2e8f0; font-size:13px; padding:7px 10px; outline:none; flex:1; min-width:80px; }
+    .af-input:focus { border-color:#60a5fa; }
+    .af-input::placeholder { color:#475569; }
+    .btn-confirm-sm { background:#2563eb; color:#fff; border:none; border-radius:6px; padding:6px 14px; font-size:12px; cursor:pointer; font-weight:700; }
+    .btn-cancel-sm { background:rgba(255,255,255,0.06); color:#94a3b8; border:none; border-radius:6px; padding:6px 14px; font-size:12px; cursor:pointer; }
+
     @media print {
-      header, .no-print { display: none !important; }
-      body { background: #fff; color: #000; }
-      .card { border-color: #ccc; background: #fff; }
-      .block-row { background: #f8f8f8; border-color: #ddd; }
+      header, .no-print { display:none !important; }
+      body { background:#fff; color:#000; }
+      .card { border-color:#ccc; background:#fff; }
+      .block-row { background:#f8f8f8; border-color:#ddd; }
     }
   </style>
 </head>
@@ -34,19 +63,32 @@
       <div class="text-white font-semibold text-base leading-tight">Administración · Predicación</div>
       <div class="text-slate-500 text-xs">Norte Garín</div>
     </div>
-    <div class="no-print" style="display:flex;gap:8px;flex-wrap:wrap;">
+    <div class="no-print" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+      <div style="display:flex;gap:4px;">
+        <button class="tab-btn active" onclick="switchTab('programa')" id="tab-programa">📋 Programa</button>
+        <button class="tab-btn" onclick="switchTab('horario')" id="tab-horario">⚙️ Horario</button>
+      </div>
       <button onclick="window.print()" style="background:#1e293b;color:#94a3b8;border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:8px 14px;font-size:13px;cursor:pointer;">Imprimir</button>
     </div>
   </div>
 </header>
+
 <main style="max-width:760px;margin:0 auto;padding:16px;">
   <div id="loadingState" style="text-align:center;padding:60px 0;">
     <div class="spinner"></div>
     <div class="text-slate-500 text-sm">Cargando datos...</div>
   </div>
-  <div id="summary" style="display:none;margin-bottom:20px;"></div>
-  <div id="appContent" style="display:none;"></div>
+
+  <div id="tabPrograma" style="display:none;">
+    <div id="summary" style="margin-bottom:20px;"></div>
+    <div id="appContent"></div>
+  </div>
+
+  <div id="tabHorario" style="display:none;">
+    <div id="scheduleEditor"></div>
+  </div>
 </main>
+
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
 <script>
@@ -57,25 +99,59 @@
     projectId:         "predicacion-publica-850aa",
     storageBucket:     "predicacion-publica-850aa.firebasestorage.app",
     messagingSenderId: "312049713615",
-    appId:             "1:312049713615:web:e07a898e7a0df4c87dd2ba",
-    measurementId:     "G-0WC3TV34T5"
+    appId:             "1:312049713615:web:e07a898e7a0df4c87dd2ba"
   };
 
   firebase.initializeApp(firebaseConfig);
   const db = firebase.database();
 
-  const UBICACIONES_SEMANA = ["Hospital Garín", "Estación Garín", "Puente 5"];
-  const UBICACION_DOMINGO  = ["Mini Estación Garín"];
+  // ── DEFAULT SCHEDULE ──────────────────────────────────────
+  function buildDefaultSchedule() {
+    const SEMANA = [
+      { key: "hospitalGarin",  label: "Hospital Garín",  orden: 1 },
+      { key: "estacionGarin",  label: "Estación Garín",  orden: 2 },
+      { key: "puente5",        label: "Puente 5",        orden: 3 },
+    ];
+    const makeBloques = (list) => {
+      const r = {};
+      list.forEach(([ini, fin], i) => {
+        const k = `${ini.replace(":","")}_${fin.replace(":","")}`;
+        r[k] = { horaInicio: ini, horaFin: fin, cupo: 4, orden: i + 1 };
+      });
+      return r;
+    };
+    const makeUbs = (locs, bloquesList) => {
+      const r = {};
+      locs.forEach(loc => {
+        r[loc.key] = { label: loc.label, orden: loc.orden, bloques: makeBloques(bloquesList) };
+      });
+      return r;
+    };
+    return {
+      lunes:     { label: "Lunes",     orden: 1, ubicaciones: makeUbs(SEMANA, [["07:00","08:00"],["08:00","09:00"],["15:00","16:00"],["16:00","17:00"]]) },
+      martes:    { label: "Martes",    orden: 2, ubicaciones: makeUbs(SEMANA, [["07:00","08:00"],["08:00","09:00"],["09:00","10:00"],["10:00","11:00"],["11:00","12:00"]]) },
+      miercoles: { label: "Miércoles", orden: 3, ubicaciones: makeUbs(SEMANA, [["07:00","08:00"],["08:00","09:00"],["15:00","16:00"],["16:00","17:00"],["17:00","18:00"],["18:00","19:00"],["19:00","20:00"]]) },
+      jueves:    { label: "Jueves",    orden: 4, ubicaciones: makeUbs(SEMANA, [["07:00","08:00"],["08:00","09:00"]]) },
+      viernes:   { label: "Viernes",   orden: 5, ubicaciones: makeUbs(SEMANA, [["07:00","08:00"],["08:00","09:00"],["17:00","18:00"],["18:00","19:00"],["19:00","20:00"]]) },
+      sabado:    { label: "Sábado",    orden: 6, ubicaciones: makeUbs(SEMANA, [["07:00","08:00"],["08:00","09:00"]]) },
+      domingo:   { label: "Domingo",   orden: 7, ubicaciones: {
+        miniEstacionGarin: { label: "Mini Estación Garín", orden: 1,
+          bloques: (() => {
+            const r = {};
+            [["17:00","18:00"],["18:00","19:00"],["19:00","20:00"]].forEach(([ini,fin],i) => {
+              r[`${ini.replace(":","")}_${fin.replace(":","")}`] = { horaInicio: ini, horaFin: fin, cupo: 4, orden: i+1 };
+            });
+            return r;
+          })()
+        }
+      }}
+    };
+  }
 
-  const SCHEDULE = [
-    { dia: "Lunes",     bloques: ["07:00-08:00","08:00-09:00","15:00-16:00","16:00-17:00"],                ubicaciones: UBICACIONES_SEMANA },
-    { dia: "Martes",    bloques: ["07:00-08:00","08:00-09:00","09:00-10:00","10:00-11:00","11:00-12:00"],  ubicaciones: UBICACIONES_SEMANA },
-    { dia: "Miércoles", bloques: ["15:00-16:00","16:00-17:00","17:00-18:00","18:00-19:00","19:00-20:00"],  ubicaciones: UBICACIONES_SEMANA },
-    { dia: "Jueves",    bloques: ["07:00-08:00","08:00-09:00"],                                             ubicaciones: UBICACIONES_SEMANA },
-    { dia: "Viernes",   bloques: ["07:00-08:00","08:00-09:00","17:00-18:00","18:00-19:00","19:00-20:00"],  ubicaciones: UBICACIONES_SEMANA },
-    { dia: "Sábado",    bloques: ["07:00-08:00","08:00-09:00"],                                             ubicaciones: UBICACIONES_SEMANA },
-    { dia: "Domingo",   bloques: ["17:00-18:00","18:00-19:00","19:00-20:00"],                               ubicaciones: UBICACION_DOMINGO  },
-  ];
+  // ── HELPERS ───────────────────────────────────────────────
+  function escHtml(s) {
+    return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+  }
 
   function turnoId(dia, bloque, ubicacion) {
     const [ini, fin] = bloque.split("-");
@@ -84,42 +160,111 @@
     return `${d}_${ini.replace(":","")}_${fin.replace(":","")}_${u}`;
   }
 
-  let turnosData = {};
+  function toUbKey(label) {
+    return label.toLowerCase()
+      .normalize("NFD").replace(/[̀-ͯ]/g,"")
+      .replace(/\s+(.)/g, (_, c) => c.toUpperCase())
+      .replace(/[^a-z0-9]/gi, "");
+  }
 
-  db.ref("predicacion/turnos").on("value", snap => {
-    turnosData = snap.val() || {};
+  function toDiaKey(label) {
+    return label.toLowerCase()
+      .normalize("NFD").replace(/[̀-ͯ]/g,"")
+      .replace(/\s+/g,"");
+  }
+
+  // ── STATE ─────────────────────────────────────────────────
+  let turnosData   = {};
+  let scheduleData = null;
+  let turnosLoaded = false;
+  let schedLoaded  = false;
+  let currentTab   = "programa";
+
+  function tryRender() {
+    if (!turnosLoaded || !schedLoaded) return;
     document.getElementById("loadingState").style.display = "none";
-    document.getElementById("summary").style.display = "block";
-    document.getElementById("appContent").style.display = "block";
-    render();
+    document.getElementById("tabPrograma").style.display = currentTab === "programa" ? "" : "none";
+    document.getElementById("tabHorario").style.display  = currentTab === "horario"  ? "" : "none";
+    if (currentTab === "programa") render();
+    if (currentTab === "horario")  renderScheduleEditor();
+  }
+
+  // ── FIREBASE LISTENERS ────────────────────────────────────
+  db.ref("predicacion/turnos").on("value", snap => {
+    turnosData   = snap.val() || {};
+    turnosLoaded = true;
+    if (turnosLoaded && schedLoaded && currentTab === "programa") render();
+    tryRender();
   });
 
-  window.eliminarAnotado = async function(tid, pid) {
-    await db.ref(`predicacion/turnos/${tid}/anotados/${pid}`).remove();
+  db.ref("predicacion/schedule").on("value", snap => {
+    scheduleData = snap.val() || {};
+    schedLoaded  = true;
+    if (turnosLoaded && schedLoaded && currentTab === "horario") renderScheduleEditor();
+    tryRender();
+  });
+
+  // ── SWITCH TAB ────────────────────────────────────────────
+  window.switchTab = function(tab) {
+    currentTab = tab;
+    document.getElementById("tab-programa").classList.toggle("active", tab === "programa");
+    document.getElementById("tab-horario").classList.toggle("active",  tab === "horario");
+    document.getElementById("tabPrograma").style.display = tab === "programa" ? "" : "none";
+    document.getElementById("tabHorario").style.display  = tab === "horario"  ? "" : "none";
+    if (!turnosLoaded || !schedLoaded) return;
+    if (tab === "programa") render();
+    if (tab === "horario")  renderScheduleEditor();
   };
 
+  // ── GET SCHEDULE AS ARRAY ─────────────────────────────────
+  function getScheduleArray() {
+    const src = (scheduleData && Object.keys(scheduleData).length > 0) ? scheduleData : buildDefaultSchedule();
+    return Object.entries(src)
+      .sort((a,b) => (a[1].orden||99) - (b[1].orden||99))
+      .map(([diaKey, diaVal]) => ({
+        diaKey,
+        dia: diaVal.label,
+        orden: diaVal.orden || 99,
+        ubicaciones: Object.entries(diaVal.ubicaciones || {})
+          .sort((a,b) => (a[1].orden||99) - (b[1].orden||99))
+          .map(([ubKey, ubVal]) => ({
+            ubKey,
+            label: ubVal.label,
+            bloques: Object.entries(ubVal.bloques || {})
+              .sort((a,b) => (a[1].orden||99) - (b[1].orden||99))
+              .map(([blKey, blVal]) => ({
+                blKey,
+                bloque: `${blVal.horaInicio}-${blVal.horaFin}`,
+                cupo: blVal.cupo || 4
+              }))
+          }))
+      }));
+  }
+
+  // ── RENDER PROGRAMA TAB ───────────────────────────────────
   function render() {
+    const schedule = getScheduleArray();
     let totalBloques = 0, bloquesConAnotados = 0, totalPersonas = 0;
     let html = "";
 
-    for (const { dia, bloques, ubicaciones } of SCHEDULE) {
+    for (const { dia, ubicaciones } of schedule) {
       let dayBloques = 0, dayConAnotados = 0, dayHtml = "";
 
-      for (const ub of ubicaciones) {
+      for (const { label: ub, bloques } of ubicaciones) {
         dayHtml += `<div style="margin-bottom:14px;">
-          <div style="color:#64748b;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;padding-left:2px;">${ub}</div>
+          <div style="color:#64748b;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;padding-left:2px;">${escHtml(ub)}</div>
           <div style="display:flex;flex-direction:column;gap:6px;">`;
 
-        for (const bl of bloques) {
-          const tid = turnoId(dia, bl, ub);
+        for (const { bloque: bl, cupo } of bloques) {
+          const tid     = turnoId(dia, bl, ub);
           const anotados = Object.entries((turnosData[tid]?.anotados) || {}).sort((a,b) => a[1].timestamp - b[1].timestamp);
-          const count = anotados.length;
+          const count   = anotados.length;
           totalBloques++; dayBloques++;
           if (count > 0) { bloquesConAnotados++; dayConAnotados++; totalPersonas += count; }
 
           let badgeClass = "badge-green";
-          if (count === 3) badgeClass = "badge-yellow";
-          if (count === 4) badgeClass = "badge-red";
+          if (count >= cupo - 1 && count < cupo) badgeClass = "badge-yellow";
+          if (count >= cupo) badgeClass = "badge-red";
           if (count === 0) badgeClass = "";
 
           dayHtml += `
@@ -127,14 +272,14 @@
             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:${count>0?'8':'0'}px;">
               <span style="font-weight:600;font-size:14px;color:#e2e8f0;">${bl.replace("-"," – ")}</span>
               <span class="${badgeClass}" style="${!badgeClass?'color:#475569;font-size:12px;':''}">
-                ${count === 0 ? "Vacío" : `${count}/4`}
+                ${count === 0 ? "Vacío" : `${count}/${cupo}`}
               </span>
             </div>
             ${count > 0 ? `<div style="display:flex;flex-direction:column;gap:4px;">
               ${anotados.map(([pid, v]) => `
                 <div style="display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,0.03);border-radius:6px;padding:5px 8px;">
-                  <span style="font-size:13px;color:#cbd5e1;">${v.nombre}</span>
-                  <button class="btn-danger-sm no-print" onclick="eliminarAnotado('${tid}','${pid}')">Quitar</button>
+                  <span style="font-size:13px;color:#cbd5e1;">${escHtml(v.nombre)}</span>
+                  <button class="btn-danger-sm no-print" onclick="eliminarAnotado('${escHtml(tid)}','${escHtml(pid)}')">Quitar</button>
                 </div>`).join("")}
             </div>` : ""}
           </div>`;
@@ -145,7 +290,7 @@
       html += `
       <div class="card" style="margin-bottom:14px;">
         <div style="padding:14px 16px;border-bottom:1px solid rgba(255,255,255,0.05);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
-          <span class="text-white font-semibold text-base">${dia}</span>
+          <span class="text-white font-semibold text-base">${escHtml(dia)}</span>
           <span style="color:#64748b;font-size:12px;">${dayConAnotados} de ${dayBloques} bloques con anotados</span>
         </div>
         <div style="padding:14px 16px;">${dayHtml}</div>
@@ -169,6 +314,216 @@
       </div>`;
 
     document.getElementById("appContent").innerHTML = html;
+  }
+
+  window.eliminarAnotado = async function(tid, pid) {
+    if (!confirm("¿Quitar esta persona del turno?")) return;
+    await db.ref(`predicacion/turnos/${tid}/anotados/${pid}`).remove();
+  };
+
+  // ── RENDER HORARIO EDITOR ─────────────────────────────────
+  function renderScheduleEditor() {
+    const el = document.getElementById("scheduleEditor");
+    const isEmpty = !scheduleData || Object.keys(scheduleData).length === 0;
+
+    if (isEmpty) {
+      el.innerHTML = `
+        <div class="card" style="padding:28px;text-align:center;margin-bottom:16px;">
+          <div style="color:#64748b;font-size:14px;margin-bottom:6px;">No hay horario configurado en Firebase.</div>
+          <div style="color:#475569;font-size:12px;margin-bottom:20px;">El programa usa el horario por defecto (hardcodeado).</div>
+          <button onclick="seedDefaultSchedule()" style="background:#2563eb;color:#fff;border:none;border-radius:8px;padding:11px 22px;font-size:14px;font-weight:700;cursor:pointer;">
+            Inicializar con valores por defecto
+          </button>
+        </div>`;
+      return;
+    }
+
+    const schArr = getScheduleArray();
+    let html = `
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px;">
+        <div style="font-size:12px;color:#64748b;">Cambios se reflejan automáticamente en la app.</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <button onclick="toggleAddDayForm()" class="btn-add-sm">+ Agregar día</button>
+          <button onclick="confirmReset()" class="btn-danger-sm">Resetear a defecto</button>
+        </div>
+      </div>
+      <div id="addDayFormContainer"></div>`;
+
+    for (const { diaKey, dia, ubicaciones } of schArr) {
+      html += `
+      <div class="sch-day-card">
+        <div class="sch-day-header">
+          <span class="sch-day-title">${escHtml(dia)}</span>
+          <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">
+            <button class="btn-add-sm" onclick="toggleAddUbicacionForm('${escHtml(diaKey)}')">+ Ubicación</button>
+            <button class="btn-danger-sm" onclick="deleteDay('${escHtml(diaKey)}','${escHtml(dia)}')">🗑️ Día</button>
+          </div>
+        </div>
+        <div class="sch-day-body">`;
+
+      for (const { ubKey, label, bloques } of ubicaciones) {
+        html += `
+          <div class="sch-ub-group">
+            <div class="sch-ub-header">
+              <span class="sch-ub-label">${escHtml(label)}</span>
+              <div style="display:flex;gap:6px;">
+                <button class="btn-add-sm" onclick="toggleAddBloqueForm('${escHtml(diaKey)}','${escHtml(ubKey)}')">+ Bloque</button>
+                <button class="btn-danger-sm" onclick="deleteUbicacion('${escHtml(diaKey)}','${escHtml(ubKey)}','${escHtml(label)}')">🗑️</button>
+              </div>
+            </div>
+            <div id="bloques-${escHtml(diaKey)}-${escHtml(ubKey)}">`;
+
+        for (const { blKey, bloque, cupo } of bloques) {
+          html += `
+              <div class="sch-bloque-row">
+                <span class="sch-bloque-time">${bloque.replace("-"," – ")}</span>
+                <span class="sch-cupo-lbl">Cupo:</span>
+                <input type="number" class="sch-cupo-input" value="${cupo}" min="1" max="20"
+                  onchange="updateCupo('${escHtml(diaKey)}','${escHtml(ubKey)}','${escHtml(blKey)}',this.value)">
+                <button class="btn-danger-sm" onclick="deleteBloque('${escHtml(diaKey)}','${escHtml(ubKey)}','${escHtml(blKey)}','${escHtml(bloque)}')">✕</button>
+              </div>`;
+        }
+
+        html += `
+            </div>
+            <div id="addBloqueForm-${escHtml(diaKey)}-${escHtml(ubKey)}" class="add-form">
+              <div class="add-form-row">
+                <input type="time" class="af-input" id="bf-ini-${escHtml(diaKey)}-${escHtml(ubKey)}" placeholder="Inicio">
+                <input type="time" class="af-input" id="bf-fin-${escHtml(diaKey)}-${escHtml(ubKey)}" placeholder="Fin">
+                <input type="number" class="af-input" id="bf-cupo-${escHtml(diaKey)}-${escHtml(ubKey)}" placeholder="Cupo" value="4" min="1" max="20" style="max-width:70px;">
+              </div>
+              <div style="display:flex;gap:6px;">
+                <button class="btn-confirm-sm" onclick="addBloque('${escHtml(diaKey)}','${escHtml(ubKey)}')">Agregar</button>
+                <button class="btn-cancel-sm" onclick="toggleAddBloqueForm('${escHtml(diaKey)}','${escHtml(ubKey)}')">Cancelar</button>
+              </div>
+            </div>
+          </div>`;
+      }
+
+      html += `
+          <div id="addUbicacionForm-${escHtml(diaKey)}" class="add-form">
+            <div class="add-form-row">
+              <input type="text" class="af-input" id="uf-label-${escHtml(diaKey)}" placeholder="Nombre de la ubicación" autocomplete="off">
+            </div>
+            <div style="display:flex;gap:6px;">
+              <button class="btn-confirm-sm" onclick="addUbicacion('${escHtml(diaKey)}')">Agregar</button>
+              <button class="btn-cancel-sm" onclick="toggleAddUbicacionForm('${escHtml(diaKey)}')">Cancelar</button>
+            </div>
+          </div>
+        </div>
+      </div>`;
+    }
+
+    el.innerHTML = html;
+  }
+
+  // ── SCHEDULE CRUD ACTIONS ─────────────────────────────────
+  window.seedDefaultSchedule = async function() {
+    await db.ref("predicacion/schedule").set(buildDefaultSchedule());
+  };
+
+  window.confirmReset = function() {
+    if (confirm("¿Resetear el horario a los valores por defecto? No se borran las anotaciones existentes.")) {
+      window.seedDefaultSchedule();
+    }
+  };
+
+  window.toggleAddDayForm = function() {
+    const container = document.getElementById("addDayFormContainer");
+    if (!container) return;
+    if (container.innerHTML) { container.innerHTML = ""; return; }
+    container.innerHTML = `
+      <div class="add-form open" style="margin-bottom:14px;">
+        <div style="font-size:13px;color:#94a3b8;margin-bottom:8px;">Nuevo día</div>
+        <div class="add-form-row">
+          <input type="text" class="af-input" id="df-label" placeholder="Nombre del día (ej: Lunes)" autocomplete="off">
+        </div>
+        <div style="display:flex;gap:6px;">
+          <button class="btn-confirm-sm" onclick="addDay()">Agregar</button>
+          <button class="btn-cancel-sm" onclick="document.getElementById('addDayFormContainer').innerHTML=''">Cancelar</button>
+        </div>
+      </div>`;
+    document.getElementById("df-label")?.focus();
+  };
+
+  window.addDay = async function() {
+    const label = document.getElementById("df-label")?.value.trim();
+    if (!label) return;
+    const diaKey = toDiaKey(label);
+    if (scheduleData && scheduleData[diaKey]) {
+      alert("Ya existe un día con ese nombre.");
+      return;
+    }
+    const maxOrden = scheduleData ? Math.max(0, ...Object.values(scheduleData).map(d => d.orden || 0)) : 0;
+    await db.ref(`predicacion/schedule/${diaKey}`).set({ label, orden: maxOrden + 1, ubicaciones: {} });
+    document.getElementById("addDayFormContainer").innerHTML = "";
+  };
+
+  window.deleteDay = async function(diaKey, dia) {
+    if (!confirm(`¿Eliminar el día "${dia}" del horario? No se borran las anotaciones.`)) return;
+    await db.ref(`predicacion/schedule/${diaKey}`).remove();
+  };
+
+  window.toggleAddUbicacionForm = function(diaKey) {
+    const el = document.getElementById(`addUbicacionForm-${diaKey}`);
+    if (!el) return;
+    el.classList.toggle("open");
+    if (el.classList.contains("open")) document.getElementById(`uf-label-${diaKey}`)?.focus();
+  };
+
+  window.addUbicacion = async function(diaKey) {
+    const label = document.getElementById(`uf-label-${diaKey}`)?.value.trim();
+    if (!label) return;
+    const ubKey = toUbKey(label);
+    const existing = scheduleData?.[diaKey]?.ubicaciones || {};
+    if (existing[ubKey]) { alert("Ya existe una ubicación con ese nombre."); return; }
+    const maxOrden = Math.max(0, ...Object.values(existing).map(u => u.orden || 0));
+    await db.ref(`predicacion/schedule/${diaKey}/ubicaciones/${ubKey}`).set({ label, orden: maxOrden + 1, bloques: {} });
+  };
+
+  window.deleteUbicacion = async function(diaKey, ubKey, label) {
+    if (!confirm(`¿Eliminar "${label}" de este día? No se borran las anotaciones.`)) return;
+    await db.ref(`predicacion/schedule/${diaKey}/ubicaciones/${ubKey}`).remove();
+  };
+
+  window.toggleAddBloqueForm = function(diaKey, ubKey) {
+    const el = document.getElementById(`addBloqueForm-${diaKey}-${ubKey}`);
+    if (!el) return;
+    el.classList.toggle("open");
+    if (el.classList.contains("open")) document.getElementById(`bf-ini-${diaKey}-${ubKey}`)?.focus();
+  };
+
+  window.addBloque = async function(diaKey, ubKey) {
+    const ini  = document.getElementById(`bf-ini-${diaKey}-${ubKey}`)?.value;
+    const fin  = document.getElementById(`bf-fin-${diaKey}-${ubKey}`)?.value;
+    const cupo = parseInt(document.getElementById(`bf-cupo-${diaKey}-${ubKey}`)?.value) || 4;
+    if (!ini || !fin) { alert("Ingresá hora de inicio y fin."); return; }
+    if (ini >= fin)   { alert("La hora de inicio debe ser menor que la hora de fin."); return; }
+    const blKey = `${ini.replace(":","")}_${fin.replace(":","")}`;
+    const existing = scheduleData?.[diaKey]?.ubicaciones?.[ubKey]?.bloques || {};
+    if (existing[blKey]) { alert("Ya existe ese bloque."); return; }
+    const maxOrden = Math.max(0, ...Object.values(existing).map(b => b.orden || 0));
+    await db.ref(`predicacion/schedule/${diaKey}/ubicaciones/${ubKey}/bloques/${blKey}`)
+      .set({ horaInicio: ini, horaFin: fin, cupo, orden: maxOrden + 1 });
+  };
+
+  window.deleteBloque = async function(diaKey, ubKey, blKey, bloque) {
+    if (!confirm(`¿Eliminar el bloque ${bloque.replace("-"," – ")}? No se borran las anotaciones.`)) return;
+    await db.ref(`predicacion/schedule/${diaKey}/ubicaciones/${ubKey}/bloques/${blKey}`).remove();
+  };
+
+  window.updateCupo = async function(diaKey, ubKey, blKey, value) {
+    const cupo = parseInt(value);
+    if (!cupo || cupo < 1) return;
+    await db.ref(`predicacion/schedule/${diaKey}/ubicaciones/${ubKey}/bloques/${blKey}/cupo`).set(cupo);
+  };
+</script>
+
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js');
+    });
   }
 </script>
 </body>

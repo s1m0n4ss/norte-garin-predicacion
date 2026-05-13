@@ -507,34 +507,97 @@
   const db = firebase.database();
 
   // ── SCHEDULE DATA ──────────────────────────────────────
-  const UBICACIONES_SEMANA = ["Hospital Garín", "Estación Garín", "Puente 5"];
-  const UBICACION_DOMINGO  = ["Mini Estación Garín"];
-
-  const SCHEDULE = [
-    { dia: "Lunes",     bloques: ["07:00-08:00","08:00-09:00","15:00-16:00","16:00-17:00"],                        ubicaciones: UBICACIONES_SEMANA },
-    { dia: "Martes",    bloques: ["07:00-08:00","08:00-09:00","09:00-10:00","10:00-11:00","11:00-12:00"],           ubicaciones: UBICACIONES_SEMANA },
-    { dia: "Miércoles", bloques: ["15:00-16:00","16:00-17:00","17:00-18:00","18:00-19:00","19:00-20:00"],           ubicaciones: UBICACIONES_SEMANA },
-    { dia: "Jueves",    bloques: ["07:00-08:00","08:00-09:00"],                                                     ubicaciones: UBICACIONES_SEMANA },
-    { dia: "Viernes",   bloques: ["07:00-08:00","08:00-09:00","17:00-18:00","18:00-19:00","19:00-20:00"],           ubicaciones: UBICACIONES_SEMANA },
-    { dia: "Sábado",    bloques: ["07:00-08:00","08:00-09:00"],                                                     ubicaciones: UBICACIONES_SEMANA },
-    { dia: "Domingo",   bloques: ["17:00-18:00","18:00-19:00","19:00-20:00"],                                       ubicaciones: UBICACION_DOMINGO  },
-  ];
-
-  const DAY_INDEX = { "Lunes":1,"Martes":2,"Miércoles":3,"Jueves":4,"Viernes":5,"Sábado":6,"Domingo":0 };
-  const ALL_LOCS  = ["Hospital Garín","Estación Garín","Puente 5","Mini Estación Garín"];
-  const ALL_DAYS  = ["Lunes","Martes","Miércoles","Jueves","Viernes","Sábado","Domingo"];
+  const DAY_INDEX  = { "Lunes":1,"Martes":2,"Miércoles":3,"Jueves":4,"Viernes":5,"Sábado":6,"Domingo":0 };
   const SHORT_DAYS = { "Lunes":"Lun","Martes":"Mar","Miércoles":"Mié","Jueves":"Jue","Viernes":"Vie","Sábado":"Sáb","Domingo":"Dom" };
-  const SHORT_LOC = {
+  const SHORT_LOC  = {
     "Hospital Garín":     "Hosp.\nGarín",
     "Estación Garín":     "Est.\nGarín",
     "Puente 5":           "Puente 5",
     "Mini Estación Garín":"Mini Est."
   };
 
-  const CELL_BLOCKS = {};
-  for (const { dia, bloques, ubicaciones } of SCHEDULE) {
-    for (const ub of ubicaciones) CELL_BLOCKS[`${dia}::${ub}`] = bloques;
+  function buildDefaultScheduleData() {
+    const SEM = [
+      { key: "hospitalGarin",  label: "Hospital Garín",  orden: 1 },
+      { key: "estacionGarin",  label: "Estación Garín",  orden: 2 },
+      { key: "puente5",        label: "Puente 5",        orden: 3 },
+    ];
+    const mkBl = (list) => {
+      const r = {};
+      list.forEach(([ini, fin], i) => {
+        r[`${ini.replace(":","")}_${fin.replace(":","")}` ] = { horaInicio: ini, horaFin: fin, cupo: 4, orden: i + 1 };
+      });
+      return r;
+    };
+    const mkUb = (locs, bl) => {
+      const r = {};
+      locs.forEach(loc => { r[loc.key] = { label: loc.label, orden: loc.orden, bloques: mkBl(bl) }; });
+      return r;
+    };
+    return {
+      lunes:     { label: "Lunes",     orden: 1, ubicaciones: mkUb(SEM, [["07:00","08:00"],["08:00","09:00"],["15:00","16:00"],["16:00","17:00"]]) },
+      martes:    { label: "Martes",    orden: 2, ubicaciones: mkUb(SEM, [["07:00","08:00"],["08:00","09:00"],["09:00","10:00"],["10:00","11:00"],["11:00","12:00"]]) },
+      miercoles: { label: "Miércoles", orden: 3, ubicaciones: mkUb(SEM, [["07:00","08:00"],["08:00","09:00"],["15:00","16:00"],["16:00","17:00"],["17:00","18:00"],["18:00","19:00"],["19:00","20:00"]]) },
+      jueves:    { label: "Jueves",    orden: 4, ubicaciones: mkUb(SEM, [["07:00","08:00"],["08:00","09:00"]]) },
+      viernes:   { label: "Viernes",   orden: 5, ubicaciones: mkUb(SEM, [["07:00","08:00"],["08:00","09:00"],["17:00","18:00"],["18:00","19:00"],["19:00","20:00"]]) },
+      sabado:    { label: "Sábado",    orden: 6, ubicaciones: mkUb(SEM, [["07:00","08:00"],["08:00","09:00"]]) },
+      domingo:   { label: "Domingo",   orden: 7, ubicaciones: {
+        miniEstacionGarin: { label: "Mini Estación Garín", orden: 1, bloques: mkBl([["17:00","18:00"],["18:00","19:00"],["19:00","20:00"]]) }
+      }}
+    };
   }
+
+  // Dynamic schedule state — rebuilt whenever Firebase schedule changes
+  let scheduleData  = {};
+  let SCHEDULE_ARRAY = [];
+  let CELL_BLOCKS    = {};
+  let ALL_DAYS       = [];
+  let ALL_LOCS       = [];
+
+  function rebuildScheduleState() {
+    const src = (scheduleData && Object.keys(scheduleData).length > 0) ? scheduleData : buildDefaultScheduleData();
+    SCHEDULE_ARRAY = Object.entries(src)
+      .sort((a,b) => (a[1].orden||99) - (b[1].orden||99))
+      .map(([diaKey, diaVal]) => ({
+        diaKey,
+        dia: diaVal.label,
+        ubicaciones: Object.entries(diaVal.ubicaciones || {})
+          .sort((a,b) => (a[1].orden||99) - (b[1].orden||99))
+          .map(([ubKey, ubVal]) => ({
+            ubKey,
+            label: ubVal.label,
+            bloques: Object.entries(ubVal.bloques || {})
+              .sort((a,b) => (a[1].orden||99) - (b[1].orden||99))
+              .map(([blKey, blVal]) => ({
+                blKey,
+                bloque: `${blVal.horaInicio}-${blVal.horaFin}`,
+                cupo: blVal.cupo || 4
+              }))
+          }))
+      }));
+    CELL_BLOCKS = {};
+    ALL_DAYS    = [];
+    const locSet = new Set();
+    for (const { dia, ubicaciones } of SCHEDULE_ARRAY) {
+      ALL_DAYS.push(dia);
+      for (const { label: ub, bloques } of ubicaciones) {
+        locSet.add(ub);
+        CELL_BLOCKS[`${dia}::${ub}`] = bloques.map(b => b.bloque);
+      }
+    }
+    ALL_LOCS = [...locSet];
+  }
+
+  function getCupo(dia, bl, ub) {
+    const dayEntry = SCHEDULE_ARRAY.find(d => d.dia === dia);
+    if (!dayEntry) return 4;
+    const ubEntry = dayEntry.ubicaciones.find(u => u.label === ub);
+    if (!ubEntry) return 4;
+    const blEntry = ubEntry.bloques.find(b => b.bloque === bl);
+    return blEntry ? blEntry.cupo : 4;
+  }
+
+  rebuildScheduleState();
 
   const clockSvg = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`;
 
@@ -573,6 +636,7 @@
   let myName         = localStorage.getItem("predicacion_nombre") || "";
   let turnosData     = {};
   let fbLoaded       = false;
+  let schedLoaded    = false;
   let sheetCellDia   = null;
   let sheetCellUb    = null;
   let currentTab     = "inicio";
@@ -696,10 +760,34 @@
   }
 
   // ── FIREBASE ───────────────────────────────────────────
+  let schedSeeded = false;
+
+  db.ref("predicacion/schedule").on("value", snap => {
+    const raw = snap.val();
+    if (!raw || Object.keys(raw).length === 0) {
+      scheduleData = buildDefaultScheduleData();
+      if (!schedSeeded) {
+        schedSeeded = true;
+        db.ref("predicacion/schedule").set(buildDefaultScheduleData());
+      }
+    } else {
+      scheduleData = raw;
+    }
+    rebuildScheduleState();
+    schedLoaded = true;
+    if (fbLoaded) {
+      document.getElementById("loadingState").style.display = "none";
+      if (myName) { hideLogin(); render(); if (currentTab === "misturnos") renderMisTurnos(); }
+    }
+    if (sheetCellDia) refreshSheet();
+    if (document.getElementById("adminView").classList.contains("vis")) renderAdminContent();
+  });
+
   const turnosRef = db.ref("predicacion/turnos");
   turnosRef.on("value", snap => {
     turnosData = snap.val() || {};
     fbLoaded   = true;
+    if (!schedLoaded) return;
     document.getElementById("loadingState").style.display = "none";
     if (myName) {
       hideLogin();
@@ -721,7 +809,8 @@
   // ── FIREBASE ACTIONS ───────────────────────────────────
   window.anotarme = async function(tid, ctx) {
     const anotados = turnosData[tid]?.anotados || {};
-    if (Object.keys(anotados).length >= 4) return;
+    const cupo = ctx ? getCupo(ctx.dia, ctx.bl, ctx.ub) : 4;
+    if (Object.keys(anotados).length >= cupo) return;
     await db.ref(`predicacion/turnos/${tid}/anotados`).push({ nombre: myName, timestamp: Date.now() });
     if (ctx) { saveHistorial(ctx.dia, ctx.bl, ctx.ub, myName); scheduleNotification(tid, ctx.dia, ctx.bl, ctx.ub); }
     showToast("¡Te anotaste exitosamente!");
@@ -730,9 +819,10 @@
   window.anotarmeConAcompaniante = async function(tid, companionName, ctx) {
     const anotados = turnosData[tid]?.anotados || {};
     const count = Object.keys(anotados).length;
-    if (count >= 4) return;
+    const cupo  = ctx ? getCupo(ctx.dia, ctx.bl, ctx.ub) : 4;
+    if (count >= cupo) return;
     await db.ref(`predicacion/turnos/${tid}/anotados`).push({ nombre: myName, timestamp: Date.now() });
-    if (count + 1 < 4) {
+    if (count + 1 < cupo) {
       await db.ref(`predicacion/turnos/${tid}/anotados`).push({ nombre: companionName, timestamp: Date.now(), addedBy: myName });
     }
     if (ctx) { saveHistorial(ctx.dia, ctx.bl, ctx.ub, myName); scheduleNotification(tid, ctx.dia, ctx.bl, ctx.ub); }
@@ -803,13 +893,14 @@
       const entries = Object.entries(turnosData[tid]?.anotados || {}).sort((a,b) => a[1].timestamp - b[1].timestamp);
       const count   = entries.length;
       const isMine  = entries.some(([,v]) => v.nombre === myName);
-      const full    = count >= 4;
+      const cupo    = getCupo(dia, bl, ub);
+      const full    = count >= cupo;
       const isPending = pendingAnotarTid === tid;
 
       const rowBorderCls = isMine ? "sbl-border-mine" : full ? "sbl-border-full" : "sbl-border-normal";
       const clockColor   = isMine ? "#10B981" : full ? "#EF4444" : "#94a3b8";
 
-      const dots = Array.from({length: 4}, (_, i) => {
+      const dots = Array.from({length: cupo}, (_, i) => {
         if (i < count) {
           const cls = entries[i][1].nombre === myName ? "sbl-dot-mine" : "sbl-dot-taken";
           return `<div class="sbl-dot ${cls}"></div>`;
@@ -875,9 +966,9 @@
     let html = `<div class="view-title">Mis Turnos</div>`;
 
     const byDay = {};
-    for (const { dia, bloques, ubicaciones } of SCHEDULE) {
-      for (const bl of bloques) {
-        for (const ub of ubicaciones) {
+    for (const { dia, ubicaciones } of SCHEDULE_ARRAY) {
+      for (const { label: ub, bloques } of ubicaciones) {
+        for (const { bloque: bl } of bloques) {
           const tid     = turnoId(dia, bl, ub);
           const entries = Object.values(turnosData[tid]?.anotados || {});
           if (entries.some(v => v.nombre === myName)) {
@@ -960,10 +1051,10 @@
   function getMyTurns() {
     const todayDow = new Date().getDay();
     const turns    = [];
-    for (const { dia, bloques, ubicaciones } of SCHEDULE) {
-      const dow = DAY_INDEX[dia];
-      for (const bl of bloques) {
-        for (const ub of ubicaciones) {
+    for (const { dia, ubicaciones } of SCHEDULE_ARRAY) {
+      const dow = DAY_INDEX[dia] ?? -1;
+      for (const { label: ub, bloques } of ubicaciones) {
+        for (const { bloque: bl } of bloques) {
           const vals = Object.values(turnosData[turnoId(dia, bl, ub)]?.anotados || {});
           if (vals.some(v => v.nombre === myName)) turns.push({ dia, bl, ub, dist: (dow - todayDow + 7) % 7 });
         }
@@ -1000,14 +1091,15 @@
     if (!myName) { showLogin(); return; }
     renderBanner();
     const todayDow = new Date().getDay();
-    let html = `<div class="grid-scroll-container"><div class="grid-wrap" id="gridWrap"><div class="schedule-grid">`;
+    let html = `<div class="grid-scroll-container"><div class="grid-wrap" id="gridWrap"><div class="schedule-grid" style="grid-template-columns:72px repeat(${ALL_DAYS.length},1fr);">`;
     html += `<div></div>`;
     for (const dia of ALL_DAYS) {
       const isToday = DAY_INDEX[dia] === todayDow;
-      html += `<div class="gh-day${isToday ? " gh-today" : ""}"><span>${SHORT_DAYS[dia]}</span>${isToday ? `<div class="gh-pip"></div>` : ""}</div>`;
+      html += `<div class="gh-day${isToday ? " gh-today" : ""}"><span>${SHORT_DAYS[dia] ?? dia.substring(0,3)}</span>${isToday ? `<div class="gh-pip"></div>` : ""}</div>`;
     }
     for (const ub of ALL_LOCS) {
-      html += `<div class="gl-loc">${escHtml(SHORT_LOC[ub]).replace("\n","<br>")}</div>`;
+      const locLabel = SHORT_LOC[ub] ?? ub;
+      html += `<div class="gl-loc">${escHtml(locLabel).replace("\n","<br>")}</div>`;
       for (const dia of ALL_DAYS) {
         const isToday  = DAY_INDEX[dia] === todayDow;
         const todayCls = isToday ? " gc-today-col" : "";
@@ -1017,8 +1109,9 @@
         for (const bl of bloques) {
           const vals  = Object.values(turnosData[turnoId(dia, bl, ub)]?.anotados || {});
           const count = vals.length;
+          const cupo  = getCupo(dia, bl, ub);
           if (vals.some(v => v.nombre === myName)) isMine = true;
-          if (count < 4) anyFree = true;
+          if (count < cupo) anyFree = true;
           if (count > 0) anyPeople = true;
           totalAnnotated += count;
         }
@@ -1106,7 +1199,7 @@
   function renderAdminContent() {
     if (!isAdmin) return;
     const diaOpts = ALL_DAYS.map(d => `<option value="${d}">${d}</option>`).join("");
-    const ubOpts  = [...UBICACIONES_SEMANA, ...UBICACION_DOMINGO].map(u => `<option value="${escHtml(u)}">${escHtml(u)}</option>`).join("");
+    const ubOpts  = ALL_LOCS.map(u => `<option value="${escHtml(u)}">${escHtml(u)}</option>`).join("");
 
     document.getElementById("adminContent").innerHTML = `
       <div class="admin-section">
@@ -1161,9 +1254,9 @@
     const el = document.getElementById("adminAnnotList");
     if (!el) return;
     let html = ""; let hasAny = false;
-    for (const { dia, bloques, ubicaciones } of SCHEDULE) {
-      for (const bl of bloques) {
-        for (const ub of ubicaciones) {
+    for (const { dia, ubicaciones } of SCHEDULE_ARRAY) {
+      for (const { label: ub, bloques } of ubicaciones) {
+        for (const { bloque: bl } of bloques) {
           const tid     = turnoId(dia, bl, ub);
           const entries = Object.entries(turnosData[tid]?.anotados || {});
           if (!entries.length) continue;
@@ -1202,9 +1295,10 @@
     const tid     = turnoId(dia, bl, ub);
     const anotados = turnosData[tid]?.anotados || {};
     const count   = Object.keys(anotados).length;
-    if (count >= 4) { showToast("Turno completo"); return; }
+    const cupo    = getCupo(dia, bl, ub);
+    if (count >= cupo) { showToast("Turno completo"); return; }
     await db.ref(`predicacion/turnos/${tid}/anotados`).push({ nombre, timestamp: Date.now() });
-    if (companion && count + 1 < 4) {
+    if (companion && count + 1 < cupo) {
       await db.ref(`predicacion/turnos/${tid}/anotados`).push({ nombre: companion, timestamp: Date.now(), addedBy: nombre });
     }
     document.getElementById("af-nombre").value = "";
@@ -1232,9 +1326,9 @@
     let totalBlocks = 0, blocksWithPeople = 0;
     const uniquePersons = new Set();
     const countByDay = {}, countByLoc = {}, countByPerson = {};
-    for (const { dia, bloques, ubicaciones } of SCHEDULE) {
-      for (const bl of bloques) {
-        for (const ub of ubicaciones) {
+    for (const { dia, ubicaciones } of SCHEDULE_ARRAY) {
+      for (const { label: ub, bloques } of ubicaciones) {
+        for (const { bloque: bl } of bloques) {
           const vals = Object.values(turnosData[turnoId(dia, bl, ub)]?.anotados || {});
           totalBlocks++;
           if (vals.length > 0) {
@@ -1280,9 +1374,9 @@
     if (!isAdmin) return;
     const now = new Date().toLocaleDateString("es-AR", { weekday: "long", year: "numeric", month: "long", day: "numeric" });
     let rows = "";
-    for (const { dia, bloques, ubicaciones } of SCHEDULE) {
-      for (const bl of bloques) {
-        for (const ub of ubicaciones) {
+    for (const { dia, ubicaciones } of SCHEDULE_ARRAY) {
+      for (const { label: ub, bloques } of ubicaciones) {
+        for (const { bloque: bl } of bloques) {
           const vals  = Object.values(turnosData[turnoId(dia, bl, ub)]?.anotados || {});
           const names = vals.map(v => escHtml(v.nombre)).join(", ") || "—";
           rows += `<tr><td>${dia}</td><td>${bl}</td><td>${escHtml(ub)}</td><td>${names}</td></tr>`;
@@ -1308,9 +1402,9 @@
   // ── ADMIN — PUBLISHERS ──────────────────────────────────
   function renderAdminPublishers() {
     const publisherMap = {};
-    for (const { dia, bloques, ubicaciones } of SCHEDULE) {
-      for (const bl of bloques) {
-        for (const ub of ubicaciones) {
+    for (const { dia, ubicaciones } of SCHEDULE_ARRAY) {
+      for (const { label: ub, bloques } of ubicaciones) {
+        for (const { bloque: bl } of bloques) {
           const vals = Object.values(turnosData[turnoId(dia, bl, ub)]?.anotados || {});
           for (const v of vals) {
             if (!publisherMap[v.nombre]) publisherMap[v.nombre] = { count: 0, lastDia: "", lastUb: "" };
