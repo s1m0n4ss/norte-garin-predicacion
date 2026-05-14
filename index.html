@@ -112,7 +112,7 @@
       border-radius: 16px; padding: 10px 16px;
     }
     .banner-user-label { font-family: 'Inter', sans-serif; font-size: 10px; color: rgba(255,255,255,0.7); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 3px; }
-    #bannerUserName { font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 700; color: #fff; cursor: pointer; max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: block; }
+    #bannerUserName { font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 700; color: #fff; cursor: pointer; max-width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: block; }
     #adminShieldBtn {
       background: rgba(253,230,138,0.2); border: 1px solid rgba(253,230,138,0.4);
       border-radius: 10px; padding: 5px 10px;
@@ -133,7 +133,7 @@
 
     /* ── LEGEND BAR ── */
     #legendBar { display: none; background: #fff; padding: 12px 20px; border-bottom: 1px solid #E2E8F0; }
-    #legendBar.vis { display: flex; gap: 16px; flex-wrap: wrap; align-items: center; }
+    #legendBar.vis { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
     .legend-item { display: flex; align-items: center; gap: 5px; font-family: 'Inter', sans-serif; font-size: 12px; color: #64748b; }
     .legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
 
@@ -198,7 +198,7 @@
     .gl-loc { font-family: 'Inter', sans-serif; font-size: 10px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.04em; display: flex; align-items: center; padding-right: 4px; line-height: 1.3; }
     .gc { min-height: 68px; border-radius: 14px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 4px; cursor: pointer; transition: transform .12s; position: relative; padding: 6px 4px; text-align: center; }
     .gc:not(.gc-none):active { transform: scale(0.96); }
-    .gc-none { background: transparent; cursor: default; }
+    .gc-none { background: #F1F5F9; cursor: default; }
     .gc-free { background: #fff; border: 1.5px solid #CBD5E1; }
     .gc-with-people { background: #F0F9FF; border: 2px solid #7dd3fc; box-shadow: 0 2px 8px rgba(0,0,0,0.07); }
     .gc-mine { background: #ecfdf5; border: 2px solid #10B981; box-shadow: 0 2px 8px rgba(0,0,0,0.07); }
@@ -386,10 +386,10 @@
 
 <!-- LEGEND BAR -->
 <div id="legendBar">
-  <div class="legend-item"><div class="legend-dot" style="background:#10B981"></div>✓ Yo anotado</div>
-  <div class="legend-item"><div class="legend-dot" style="background:#2563EB"></div>Con lugar</div>
-  <div class="legend-item"><div class="legend-dot" style="background:#fca5a5"></div>Completo</div>
   <div class="legend-item"><div class="legend-dot" style="background:#CBD5E1"></div>Libre</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#2563EB"></div>Con lugar</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#10B981"></div>✓ Vos anotado</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#EF4444"></div>Completo</div>
 </div>
 
 <!-- AVISO BANNER -->
@@ -1060,11 +1060,12 @@
         }
       }
     }
-    return turns.sort((a,b) => a.dist !== b.dist ? a.dist - b.dist : a.bl.localeCompare(b.bl)).slice(0, 2);
+    return turns.sort((a,b) => a.dist !== b.dist ? a.dist - b.dist : a.bl.localeCompare(b.bl));
   }
 
   function renderBanner() {
-    document.getElementById("bannerUserName").textContent = myName;
+    const displayName = myName.length > 12 ? myName.split(" ")[0] : myName;
+    document.getElementById("bannerUserName").textContent = displayName;
     document.getElementById("adminShieldBtn").classList.toggle("vis", isAdmin);
     const turns = getMyTurns();
     const el    = document.getElementById("bannerTurns");
@@ -1072,12 +1073,23 @@
       el.innerHTML = '<span style="color:rgba(255,255,255,0.4);font-size:13px;font-style:italic">Sin turnos anotados</span>';
       return;
     }
-    el.innerHTML = turns.map(t => `
-      <div class="banner-turn-card">
-        <div class="turn-card-time">${SHORT_DAYS[t.dia]} · ${t.bl.split("-")[0]}</div>
-        <div class="turn-card-loc">${escHtml(t.ub)}</div>
-      </div>
-    `).join("");
+    if (turns.length === 1) {
+      const t = turns[0];
+      el.innerHTML = `
+        <div class="banner-turn-card">
+          <div class="turn-card-time">${SHORT_DAYS[t.dia]} · ${t.bl.split("-")[0]}</div>
+          <div class="turn-card-loc">${escHtml(t.ub)}</div>
+        </div>`;
+      return;
+    }
+    el.innerHTML = `
+      <div class="banner-turn-card" style="cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:8px;" onclick="window.switchTab('misturnos')">
+        <div>
+          <div class="turn-card-time">${turns.length} turnos esta semana</div>
+          <div class="turn-card-loc">Ver todos →</div>
+        </div>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>`;
   }
 
   function nameLabel(nameSet) {
@@ -1105,7 +1117,7 @@
         const todayCls = isToday ? " gc-today-col" : "";
         const bloques  = CELL_BLOCKS[`${dia}::${ub}`];
         if (!bloques) { html += `<div class="gc gc-none"></div>`; continue; }
-        let isMine = false, anyFree = false, anyPeople = false, totalAnnotated = 0;
+        let isMine = false, anyFree = false, anyPeople = false, totalAnnotated = 0, totalCupo = 0;
         for (const bl of bloques) {
           const vals  = Object.values(turnosData[turnoId(dia, bl, ub)]?.anotados || {});
           const count = vals.length;
@@ -1114,13 +1126,14 @@
           if (count < cupo) anyFree = true;
           if (count > 0) anyPeople = true;
           totalAnnotated += count;
+          totalCupo += cupo;
         }
         if (isMine) {
           html += `<div class="gc gc-mine${todayCls}" data-dia="${escHtml(dia)}" data-ub="${escHtml(ub)}"><div class="gc-dot"></div><span class="gc-text">✓ Vos</span></div>`;
         } else if (!anyFree) {
           html += `<div class="gc gc-full${todayCls}" data-dia="${escHtml(dia)}" data-ub="${escHtml(ub)}"><div class="gc-dot"></div><span class="gc-text">Lleno</span></div>`;
         } else if (anyPeople) {
-          html += `<div class="gc gc-with-people${todayCls}" data-dia="${escHtml(dia)}" data-ub="${escHtml(ub)}"><div class="gc-dot"></div><span class="gc-text">${totalAnnotated}</span></div>`;
+          html += `<div class="gc gc-with-people${todayCls}" data-dia="${escHtml(dia)}" data-ub="${escHtml(ub)}"><div class="gc-dot"></div><span class="gc-text">${totalAnnotated}/${totalCupo}</span></div>`;
         } else {
           html += `<div class="gc gc-free${todayCls}" data-dia="${escHtml(dia)}" data-ub="${escHtml(ub)}"><div class="gc-dot"></div><span class="gc-text">—</span></div>`;
         }
