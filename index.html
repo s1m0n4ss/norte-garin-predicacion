@@ -194,11 +194,13 @@
     .schedule-grid { display: grid; grid-template-columns: 72px repeat(7, 1fr); min-width: 540px; gap: 4px; }
     .gh-day { font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 700; text-align: center; color: #94a3b8; padding-bottom: 8px; display: flex; flex-direction: column; align-items: center; gap: 3px; }
     .gh-day.gh-today { color: #2563EB; }
+    .gh-today-pill { background: #dbeafe; color: #2563EB; border-radius: 20px; padding: 2px 8px; font-size: 11px; font-weight: 700; font-family: 'Inter', sans-serif; white-space: nowrap; }
     .gh-pip { width: 4px; height: 4px; border-radius: 50%; background: #2563EB; }
     .gl-loc { font-family: 'Inter', sans-serif; font-size: 10px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.04em; display: flex; align-items: center; padding-right: 4px; line-height: 1.3; }
     .gc { min-height: 68px; border-radius: 14px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 4px; cursor: pointer; transition: transform .12s; position: relative; padding: 6px 4px; text-align: center; }
     .gc:not(.gc-none):active { transform: scale(0.96); }
-    .gc-none { background: #F1F5F9; cursor: default; }
+    .gc-none { background: #EAECF0; cursor: default; }
+    .gc-none-line { width: 16px; height: 2px; background: #CBD5E1; border-radius: 1px; }
     .gc-free { background: #fff; border: 1.5px solid #CBD5E1; }
     .gc-with-people { background: #F0F9FF; border: 2px solid #7dd3fc; box-shadow: 0 2px 8px rgba(0,0,0,0.07); }
     .gc-mine { background: #ecfdf5; border: 2px solid #10B981; box-shadow: 0 2px 8px rgba(0,0,0,0.07); }
@@ -386,10 +388,10 @@
 
 <!-- LEGEND BAR -->
 <div id="legendBar">
-  <div class="legend-item"><div class="legend-dot" style="background:#CBD5E1"></div>Libre</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#10B981"></div>Yo anotado</div>
   <div class="legend-item"><div class="legend-dot" style="background:#2563EB"></div>Con lugar</div>
-  <div class="legend-item"><div class="legend-dot" style="background:#10B981"></div>✓ Vos anotado</div>
   <div class="legend-item"><div class="legend-dot" style="background:#EF4444"></div>Completo</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#CBD5E1"></div>Libre</div>
 </div>
 
 <!-- AVISO BANNER -->
@@ -937,11 +939,24 @@
         </div>
       ` : "";
 
+      let subTxt;
+      if (isMine) {
+        subTxt = `<div style="font-size:12px;color:#10B981;font-weight:600;margin-top:2px;">✓ Yo anotado</div>`;
+      } else if (full) {
+        subTxt = `<div style="font-size:12px;color:#EF4444;margin-top:2px;">Turno completo</div>`;
+      } else if (count > 0) {
+        const names = entries.slice(0,2).map(([,v]) => escHtml(v.nombre.split(" ")[0])).join(", ");
+        const freeSpots = cupo - count;
+        subTxt = `<div style="font-size:12px;color:#64748b;margin-top:2px;">${names} · ${freeSpots} libre${freeSpots===1?"":"s"}</div>`;
+      } else {
+        subTxt = `<div style="font-size:12px;color:#94a3b8;margin-top:2px;">${cupo} lugares libres</div>`;
+      }
+
       html += `
         <div class="sbl-row ${rowBorderCls}">
           <div class="sbl-main">
             <div class="sbl-clock" style="color:${clockColor}">${clockSvg}</div>
-            <div class="sbl-info"><div class="sbl-time">${bl.replace("-"," – ")}</div></div>
+            <div class="sbl-info"><div class="sbl-time">${bl.replace("-"," – ")}</div>${subTxt}</div>
             <div class="sbl-dots">${dots}</div>
             <div class="sbl-action">${actionHtml}</div>
           </div>
@@ -990,7 +1005,7 @@
             </svg>
           </div>
           <div class="mt-empty-title">No tenés turnos anotados esta semana</div>
-          <div class="mt-empty-sub">Tocá una celda en el inicio para anotarte</div>
+          <div class="mt-empty-sub">Anotate desde la grilla en Inicio</div>
         </div>
       `;
     } else {
@@ -1070,25 +1085,24 @@
     const turns = getMyTurns();
     const el    = document.getElementById("bannerTurns");
     if (turns.length === 0) {
-      el.innerHTML = '<span style="color:rgba(255,255,255,0.4);font-size:13px;font-style:italic">Sin turnos anotados</span>';
+      el.innerHTML = '<span style="color:rgba(255,255,255,0.4);font-size:13px;font-style:italic">Sin turnos anotados esta semana</span>';
       return;
     }
+    const next = turns[0];
+    const nextCard = `
+      <div class="banner-turn-card" style="flex:1;">
+        <div class="turn-card-time">PRÓXIMO TURNO · ${SHORT_DAYS[next.dia]} ${next.bl.split("-")[0]}</div>
+        <div class="turn-card-loc">${escHtml(next.ub)}</div>
+      </div>`;
     if (turns.length === 1) {
-      const t = turns[0];
-      el.innerHTML = `
-        <div class="banner-turn-card">
-          <div class="turn-card-time">${SHORT_DAYS[t.dia]} · ${t.bl.split("-")[0]}</div>
-          <div class="turn-card-loc">${escHtml(t.ub)}</div>
-        </div>`;
+      el.innerHTML = nextCard;
       return;
     }
     el.innerHTML = `
-      <div class="banner-turn-card" style="cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:8px;" onclick="window.switchTab('misturnos')">
-        <div>
-          <div class="turn-card-time">${turns.length} turnos esta semana</div>
-          <div class="turn-card-loc">Ver todos →</div>
-        </div>
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      ${nextCard}
+      <div onclick="window.switchTab('misturnos')" style="cursor:pointer;background:rgba(16,185,129,0.2);border:1px solid rgba(16,185,129,0.4);border-radius:14px;padding:10px 14px;text-align:center;flex-shrink:0;">
+        <div style="font-family:'Poppins',sans-serif;font-size:22px;font-weight:700;color:#34d399;line-height:1;">${turns.length}</div>
+        <div style="font-family:'Inter',sans-serif;font-size:10px;color:rgba(255,255,255,0.6);margin-top:2px;">turnos</div>
       </div>`;
   }
 
@@ -1107,7 +1121,9 @@
     html += `<div></div>`;
     for (const dia of ALL_DAYS) {
       const isToday = DAY_INDEX[dia] === todayDow;
-      html += `<div class="gh-day${isToday ? " gh-today" : ""}"><span>${SHORT_DAYS[dia] ?? dia.substring(0,3)}</span>${isToday ? `<div class="gh-pip"></div>` : ""}</div>`;
+      html += isToday
+        ? `<div class="gh-day gh-today"><span class="gh-today-pill">${SHORT_DAYS[dia] ?? dia.substring(0,3)}</span></div>`
+        : `<div class="gh-day"><span>${SHORT_DAYS[dia] ?? dia.substring(0,3)}</span></div>`;
     }
     for (const ub of ALL_LOCS) {
       const locLabel = SHORT_LOC[ub] ?? ub;
@@ -1116,7 +1132,7 @@
         const isToday  = DAY_INDEX[dia] === todayDow;
         const todayCls = isToday ? " gc-today-col" : "";
         const bloques  = CELL_BLOCKS[`${dia}::${ub}`];
-        if (!bloques) { html += `<div class="gc gc-none"></div>`; continue; }
+        if (!bloques) { html += `<div class="gc gc-none"><div class="gc-none-line"></div></div>`; continue; }
         let isMine = false, anyFree = false, anyPeople = false, totalAnnotated = 0, totalCupo = 0;
         for (const bl of bloques) {
           const vals  = Object.values(turnosData[turnoId(dia, bl, ub)]?.anotados || {});
@@ -1128,12 +1144,14 @@
           totalAnnotated += count;
           totalCupo += cupo;
         }
+        const freeCount = totalCupo - totalAnnotated;
+        const freeLbl   = `${freeCount} libre${freeCount === 1 ? "" : "s"}`;
         if (isMine) {
-          html += `<div class="gc gc-mine${todayCls}" data-dia="${escHtml(dia)}" data-ub="${escHtml(ub)}"><div class="gc-dot"></div><span class="gc-text">✓ Vos</span></div>`;
+          html += `<div class="gc gc-mine${todayCls}" data-dia="${escHtml(dia)}" data-ub="${escHtml(ub)}"><div class="gc-dot"></div><span class="gc-text">✓ Yo</span></div>`;
         } else if (!anyFree) {
           html += `<div class="gc gc-full${todayCls}" data-dia="${escHtml(dia)}" data-ub="${escHtml(ub)}"><div class="gc-dot"></div><span class="gc-text">Lleno</span></div>`;
         } else if (anyPeople) {
-          html += `<div class="gc gc-with-people${todayCls}" data-dia="${escHtml(dia)}" data-ub="${escHtml(ub)}"><div class="gc-dot"></div><span class="gc-text">${totalAnnotated}/${totalCupo}</span></div>`;
+          html += `<div class="gc gc-with-people${todayCls}" data-dia="${escHtml(dia)}" data-ub="${escHtml(ub)}"><div class="gc-dot"></div><span class="gc-text">${freeLbl}</span></div>`;
         } else {
           html += `<div class="gc gc-free${todayCls}" data-dia="${escHtml(dia)}" data-ub="${escHtml(ub)}"><div class="gc-dot"></div><span class="gc-text">—</span></div>`;
         }
