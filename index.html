@@ -973,7 +973,7 @@
             return `<div class="person-slot">
               <div class="person-slot-name${isMe ? " mine" : ""}">
                 <div class="person-slot-dot${isMe ? " mine" : ""}"></div>
-                ${escHtml(v.nombre.split(" ")[0])}${v.addedBy ? `<span style="font-size:11px;color:#94a3b8;font-weight:400;"> (acomp.)</span>` : ""}
+                ${escHtml(v.nombre)}${v.addedBy ? `<span style="font-size:11px;color:#94a3b8;font-weight:400;"> (acomp.)</span>` : ""}
               </div>
             </div>`;
           }
