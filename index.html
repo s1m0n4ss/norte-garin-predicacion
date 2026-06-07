@@ -303,6 +303,7 @@
     /* ── TOAST ── */
     .toast { position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%) translateY(20px); background: #0F172A; color: #fff; border-radius: 14px; padding: 12px 20px; font-family: 'Inter', sans-serif; font-size: 14px; box-shadow: 0 8px 32px rgba(0,0,0,0.25); opacity: 0; transition: opacity .25s, transform .25s; z-index: 200; white-space: nowrap; pointer-events: none; }
     .toast.toast-visible { opacity: 1; transform: translateX(-50%) translateY(0); }
+    .toast.toast-error { background: #EF4444; }
 
     /* ── BOTTOM NAV ── */
     #bottomNav { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; border-top: 1px solid #E2E8F0; padding: 10px 0 calc(18px + env(safe-area-inset-bottom)); box-shadow: 0 -2px 16px rgba(0,0,0,0.06); z-index: 40; display: none; justify-content: space-around; align-items: center; }
@@ -677,12 +678,17 @@
   let historialRef   = null;
 
   // ── TOAST ──────────────────────────────────────────────
-  function showToast(msg) {
+  function showToast(msg, isError) {
     const t = document.getElementById("toastMsg");
     t.textContent = msg;
+    t.classList.toggle("toast-error", !!isError);
     t.classList.add("toast-visible");
     clearTimeout(t._tid);
     t._tid = setTimeout(() => t.classList.remove("toast-visible"), 2500);
+  }
+
+  function showErrorToast() {
+    showToast("Error al guardar. Verificá tu conexión e intentá de nuevo.", true);
   }
 
   // ── TAB NAVIGATION ─────────────────────────────────────
@@ -873,40 +879,55 @@
 
   // ── FIREBASE ACTIONS ───────────────────────────────────
   window.anotarme = async function(tid, ctx) {
-    const anotados = turnosData[tid]?.anotados || {};
-    const cupo = ctx ? getCupo(ctx.dia, ctx.bl, ctx.ub) : 4;
-    if (Object.keys(anotados).length >= cupo) return;
-    const par = nextPar(anotados);
-    await db.ref(`predicacion/turnos/${tid}/anotados`).push({ nombre: myName, timestamp: Date.now(), par });
-    if (ctx) { saveHistorial(ctx.dia, ctx.bl, ctx.ub, myName); scheduleNotification(tid, ctx.dia, ctx.bl, ctx.ub); }
-    showToast("¡Te anotaste exitosamente!");
+    try {
+      const anotados = turnosData[tid]?.anotados || {};
+      const cupo = ctx ? getCupo(ctx.dia, ctx.bl, ctx.ub) : 4;
+      if (Object.keys(anotados).length >= cupo) return;
+      const par = nextPar(anotados);
+      await db.ref(`predicacion/turnos/${tid}/anotados`).push({ nombre: myName, timestamp: Date.now(), par });
+      if (ctx) { saveHistorial(ctx.dia, ctx.bl, ctx.ub, myName); scheduleNotification(tid, ctx.dia, ctx.bl, ctx.ub); }
+      showToast("¡Te anotaste exitosamente!");
+    } catch (err) {
+      console.error("anotarme:", err);
+      showErrorToast();
+    }
   };
 
   window.anotarmeConAcompaniante = async function(tid, companionName, ctx) {
-    const anotados = turnosData[tid]?.anotados || {};
-    const count = Object.keys(anotados).length;
-    const cupo  = ctx ? getCupo(ctx.dia, ctx.bl, ctx.ub) : 4;
-    if (count >= cupo) return;
-    // Al traer acompañante propio siempre se abre un par nuevo (no se completa el par de otra persona)
-    const existingNums = Object.values(anotados).map(v => v.par).filter(p => p != null).map(Number);
-    const par = existingNums.length > 0 ? Math.max(...existingNums) + 1 : 1;
-    await db.ref(`predicacion/turnos/${tid}/anotados`).push({ nombre: myName, timestamp: Date.now(), par });
-    if (count + 1 < cupo) {
-      await db.ref(`predicacion/turnos/${tid}/anotados`).push({ nombre: companionName, timestamp: Date.now(), addedBy: myName, par });
+    try {
+      const anotados = turnosData[tid]?.anotados || {};
+      const count = Object.keys(anotados).length;
+      const cupo  = ctx ? getCupo(ctx.dia, ctx.bl, ctx.ub) : 4;
+      if (count >= cupo) return;
+      // Al traer acompañante propio siempre se abre un par nuevo (no se completa el par de otra persona)
+      const existingNums = Object.values(anotados).map(v => v.par).filter(p => p != null).map(Number);
+      const par = existingNums.length > 0 ? Math.max(...existingNums) + 1 : 1;
+      await db.ref(`predicacion/turnos/${tid}/anotados`).push({ nombre: myName, timestamp: Date.now(), par });
+      if (count + 1 < cupo) {
+        await db.ref(`predicacion/turnos/${tid}/anotados`).push({ nombre: companionName, timestamp: Date.now(), addedBy: myName, par });
+      }
+      if (ctx) { saveHistorial(ctx.dia, ctx.bl, ctx.ub, myName); scheduleNotification(tid, ctx.dia, ctx.bl, ctx.ub); }
+      showToast("¡Te anotaste exitosamente!");
+    } catch (err) {
+      console.error("anotarmeConAcompaniante:", err);
+      showErrorToast();
     }
-    if (ctx) { saveHistorial(ctx.dia, ctx.bl, ctx.ub, myName); scheduleNotification(tid, ctx.dia, ctx.bl, ctx.ub); }
-    showToast("¡Te anotaste exitosamente!");
   };
 
   window.desanotarme = async function(tid) {
-    const anotados = turnosData[tid]?.anotados || {};
-    const toRemove = [];
-    for (const [pid, val] of Object.entries(anotados)) {
-      if (val.nombre === myName || val.addedBy === myName) toRemove.push(pid);
+    try {
+      const anotados = turnosData[tid]?.anotados || {};
+      const toRemove = [];
+      for (const [pid, val] of Object.entries(anotados)) {
+        if (val.nombre === myName || val.addedBy === myName) toRemove.push(pid);
+      }
+      if (!toRemove.length) return;
+      await Promise.all(toRemove.map(pid => db.ref(`predicacion/turnos/${tid}/anotados/${pid}`).remove()));
+      showToast("Te desanotaste del turno");
+    } catch (err) {
+      console.error("desanotarme:", err);
+      showErrorToast();
     }
-    if (!toRemove.length) return;
-    await Promise.all(toRemove.map(pid => db.ref(`predicacion/turnos/${tid}/anotados/${pid}`).remove()));
-    showToast("Te desanotaste del turno");
   };
 
   // ── INLINE FORMS ───────────────────────────────────────
@@ -923,28 +944,33 @@
   };
 
   window.submitInlineForm = async function(tid, formType) {
-    const nameInput = document.getElementById(`if-name-${tid}`);
-    const name = nameInput ? nameInput.value.trim() : myName;
-    if (!name) { showToast("Ingresá tu nombre"); return; }
-    if (name !== myName) {
-      myName = name;
-      localStorage.setItem("predicacion_nombre", name);
-      document.getElementById("bannerUserName").textContent = myName.length > 12 ? myName.split(" ")[0] : myName;
-    }
-    pendingAnotarTid = null;
-    pendingFormType  = null;
-    const dia = sheetCellDia, ub = sheetCellUb;
-    const bloques = CELL_BLOCKS[`${dia}::${ub}`] || [];
-    let bl = null;
-    for (const b of bloques) { if (turnoId(dia, b, ub) === tid) { bl = b; break; } }
-    const ctx = { dia, bl, ub };
-    if (formType === "ser-companero") {
-      await window.anotarme(tid, ctx);
-    } else {
-      const compInput = document.getElementById(`if-companion-${tid}`);
-      const companion = compInput ? compInput.value.trim() : "";
-      if (companion) await window.anotarmeConAcompaniante(tid, companion, ctx);
-      else await window.anotarme(tid, ctx);
+    try {
+      const nameInput = document.getElementById(`if-name-${tid}`);
+      const name = nameInput ? nameInput.value.trim() : myName;
+      if (!name) { showToast("Ingresá tu nombre"); return; }
+      if (name !== myName) {
+        myName = name;
+        localStorage.setItem("predicacion_nombre", name);
+        document.getElementById("bannerUserName").textContent = myName.length > 12 ? myName.split(" ")[0] : myName;
+      }
+      pendingAnotarTid = null;
+      pendingFormType  = null;
+      const dia = sheetCellDia, ub = sheetCellUb;
+      const bloques = CELL_BLOCKS[`${dia}::${ub}`] || [];
+      let bl = null;
+      for (const b of bloques) { if (turnoId(dia, b, ub) === tid) { bl = b; break; } }
+      const ctx = { dia, bl, ub };
+      if (formType === "ser-companero") {
+        await window.anotarme(tid, ctx);
+      } else {
+        const compInput = document.getElementById(`if-companion-${tid}`);
+        const companion = compInput ? compInput.value.trim() : "";
+        if (companion) await window.anotarmeConAcompaniante(tid, companion, ctx);
+        else await window.anotarme(tid, ctx);
+      }
+    } catch (err) {
+      console.error("submitInlineForm:", err);
+      showErrorToast();
     }
   };
 
